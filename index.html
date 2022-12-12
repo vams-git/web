@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+  <link href="style.css" rel="stylesheet" />
+  <title>VAMS Checklist</title>
+  <link rel="icon" href="https://afiqrostam.github.io/vams-checklist/icon.png" size="64x64" type="image/png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+</head>
+
+<body class="bg-light pt-md-5">
+  <div id="alert" class="container fixed-bottom p-1">
+    <div :id="data.id" v-for="data in datas" :key="data.id"
+      v-bind="{ 'class': 'lh-sm my-1 alert text-light opacity-85 alert-dismissible fade show pre-line '+data.classfix }">
+      {{ data.text }}
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"
+        @click="remove(data)"></button>
+    </div>
+  </div>
+  <div id="form" class="container p-1 mb-5">
+    <div class="min-vh-95 d-flex align-items-center justify-content-center" v-if="Object.keys(data).length == 0">
+      <div class="spinner-grow text-dark" role="status" v-show="broken == false">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div class="fs-1 text-center lead" v-show="broken == true">
+        <i class="bi bi-cloud-lightning-rain big"></i>
+        <p>Oh no! Something broken</p>
+      </div>
+    </div>
+    <div class="card min-vh-95" v-else>
+      <div class="p-3 small">
+        <p class="px-1 mt-2">
+          <span>{{data.wo }}: </span><br>
+          <span>{{ data.desc }}</span><br>
+          <span>Work Order in status {{ data.status_desc }}</span><br>
+          <span class="text-warning bg-dark small font-monospace px-1" v-if="data.status">Checklist updates suspended
+            under this
+            status</span>
+        </p>
+        <ul class="list-unstyled px-1 m-0">
+          <li>When updating, the tickbox on each checklist items indicates:</li>
+          <li><i class="bi bi-circle pe-2"></i><span>unanswered checklist;</span></li>
+          <li><i class="bi bi-circle text-info pe-2"></i><span>unanswered checklist synced to VAMS;</span></li>
+          <li><i class="bi bi-check-circle pe-2"></i><span>answered checklist;</span></li>
+          <li><i class="bi bi-check-circle-fill text-info pe-2"></i><span>answered checklist synced to VAMS;</span></li>
+        </ul>
+      </div>
+      <div class="accordion accordion-flush" :id="data.id">
+        <div class="accordion-item" v-for="( activity, index ) in data.activities" :key="activity.id">
+          <div class="accordion-header" :id="'h'+activity.id">
+            <button :class="[ index == 0 ? 'accordion-button py-3' : 'accordion-button py-3 collapsed']" type="button"
+              data-bs-toggle="collapse" aria-expanded="false"
+              v-bind="{ 'data-bs-target': '#c'+activity.id, 'aria-controls': 'c'+activity.id }">
+              <span class="h6 p-0 m-0">{{ activity.act+' '+activity.act_note}}</span>
+            </button>
+          </div>
+          <div
+            v-bind="{ 'id': 'c'+activity.id, 'aria-labelledby': 'h'+activity.id, 'data-bs-parent': '#'+activity.parentid }"
+            :class="[ index == 0 ? 'accordion-collapse collapse show' : 'accordion-collapse collapse']">
+            <template v-if="activity.groups !== undefined">
+              <div class="accordion accordion-flush" :id="activity.id">
+                <div class="accordion-item" v-for="group in activity.groups" :key="group.id">
+                  <div class="accordion-header" :id="'h'+group.id">
+                    <button class="accordion-button py-2 collapsed" type="button" data-bs-toggle="collapse"
+                      aria-expanded="false" v-bind="{ 'data-bs-target': '#c'+group.id, 'aria-controls': 'c'+group.id }">
+                      <span class="w-100">{{ group.group_label}}</span>
+                      <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group) }} of {{
+                        group.items.length}} done )</span>
+                    </button>
+                  </div>
+                  <div
+                    v-bind="{ 'id': 'c'+group.id, 'aria-labelledby': 'h'+group.id, 'data-bs-parent': '#'+group.parentid }"
+                    class="accordion-collapse collapse">
+                    <template v-if="group.items !== undefined">
+                      <div class="accordion accordion-flush" :id="group.id">
+                        <div class="accordion-item" v-for="item in group.items" :key="item.ack_code">
+                          <div class="accordion-header" :id="'h'+item.ack_code">
+                            <button @click="expandTextArea"
+                              :class="[ !data.status ? 'accordion-button py-2 collapsed' : 'form-static accordion-button py-2 collapsed' ]"
+                              type="button" data-bs-toggle="collapse" aria-expanded="false"
+                              v-bind="{ 'data-bs-target': '#c'+item.ack_code, 'aria-controls': 'c'+item.ack_code }">
+                              <div class="fw-light pe-2">
+                                <i class="bi bi-circle pe-2"
+                                  v-if="!getItemCompleted(item) && !item.updated && !item.process"></i>
+                                <i class="bi bi-circle-fill pe-2"
+                                  v-if="!getItemCompleted(item) && item.updated && !item.process"></i>
+                                <i class="bi bi-circle text-info pe-2"
+                                  v-if="!getItemCompleted(item) && item.updated && item.process"></i>
+                                <i class="bi bi-check-circle pe-2"
+                                  v-if="getItemCompleted(item) && !item.updated && !item.process"></i>
+                                <i class="bi bi-check-circle-fill pe-2"
+                                  v-if="getItemCompleted(item) && item.updated && !item.process"></i>
+                                <i class="bi bi-check-circle-fill text-info pe-2"
+                                  v-if="getItemCompleted(item) && item.updated && item.process"></i>
+                                <span>{{ item.ack_desc }}</span>
+                                <p v-if="item.ack_taskchecklistcode_comments != ''" class="pre-line ps-4 m-0">{{
+                                  item.ack_taskchecklistcode_comments }}</p>
+                              </div>
+                            </button>
+                          </div>
+                          <div
+                            v-bind="{ 'id': 'c'+item.ack_code, 'aria-labelledby': 'h'+item.ack_code, 'data-bs-parent': '#'+item.parentid  }"
+                            class="accordion-collapse collapse" v-if="!data.status">
+                            <div class="accordion-body">
+                              <div class="d-grid gap-2 d-sm-flex mb-2">
+                                <div class="flex-fill" v-if="item.ack_type == '01'">
+                                  <input type="checkbox" class="btn-check" :id="'COMP'+item.ack_code" autocomplete="off"
+                                    v-model="item.ack_completed" true-value="+" false-value="-"
+                                    @change="snycItems(item)">
+                                  <label class="btn btn-outline-primary d-block"
+                                    :for="'COMP'+item.ack_code">Completed</label>
+                                </div>
+                                <div class="flex-fill d-grip gap-2 d-flex " v-if="item.ack_type == '02'">
+                                  <input type="radio" class="btn-check" :id="'YES'+item.ack_code"
+                                    @change="snycItems(item)" :name="'YES'+item.ack_code" autocomplete="off"
+                                    v-model="item.ack_yes" value="+">
+                                  <label class="btn btn-outline-primary flex-fill"
+                                    :for="'YES'+item.ack_code">Yes</label>
+                                  <input type="radio" class="btn-check" :id="'NO'+item.ack_code"
+                                    @change="snycItems(item)" :name="'YES'+item.ack_code" autocomplete="off"
+                                    v-model="item.ack_yes" value="-">
+                                  <label class="btn btn-outline-info flex-fill" :for="'NO'+item.ack_code">No</label>
+                                </div>
+                                <div class="flex-fill" v-if="item.ack_type == '03'">
+                                  <select type="checkbox" class="form-select" :id="'FIND'+item.ack_code"
+                                    autocomplete="off" v-model="item.ack_finding" @change="snycItems(item)">
+                                    <option disabled value="">select one</option>
+                                    <option v-for="option in item.ack_possiblefindings" :value="option.value">
+                                      {{ option.text }}
+                                    </option>
+                                  </select>
+                                </div>
+                                <div class="flex-fill" v-if="item.ack_type == '04'">
+                                  <div class="input-group">
+                                    <input type="number" v-model="item.ack_value" @input="snycItems(item)"
+                                      class="form-control" :placeholder="item.ack_desc"
+                                      v-bind="{'aria-describedby' : 'VAL'+item.ack_code }">
+                                    <span class="input-group-text" :id="'VAL'+item.ack_code">{{ item.ack_uom }}</span>
+                                  </div>
+                                </div>
+                                <div class="flex-fill d-grip gap-2 d-flex " v-if="item.ack_type == '09'">
+                                  <input type="radio" class="btn-check" :id="'OK'+item.ack_code"
+                                    @change="snycItems(item)" :name="'OK'+item.ack_code" autocomplete="off"
+                                    v-model="item.ack_ok" value="+">
+                                  <label class="btn btn-outline-primary flex-fill" :for="'OK'+item.ack_code">OK</label>
+                                  <input type="radio" class="btn-check" :id="'ADJ'+item.ack_code"
+                                    @change="snycItems(item)" :name="'OK'+item.ack_code" autocomplete="off"
+                                    v-model="item.ack_ok" value="-">
+                                  <label class="btn btn-outline-info flex-fill"
+                                    :for="'ADJ'+item.ack_code">Adjusted</label>
+                                </div>
+                                <div class="flex-fill form-floating" v-if="item.ack_type == '15'">
+                                  <input type="text" class="form-control" :id="'FREE'+item.ack_code" autocomplete="off"
+                                    v-model="item.ack_freetext" :placeholder="item.ack_desc" @input="snycItems(item)">
+                                  <label :for="'FREE'+item.ack_code">{{ item.ack_desc }}</label>
+                                </div>
+                                <div class="flex-fill d-flex">
+                                  <input type="checkbox" class="btn-check" :id="'NA'+item.ack_code" autocomplete="off"
+                                    v-model="item.ack_not_applicable" true-value="NA" false-value=""
+                                    @change="snycItems(item)">
+                                  <label class="btn btn-outline-secondary flex-fill" :for="'NA'+item.ack_code">Not
+                                    Applicable</label>
+                                </div>
+                              </div>
+                              <div class="mb-2 form-floating">
+                                <textarea :ref="'NOTES'+item.ack_code" :id="'NOTES'+item.ack_code" class="form-control" v-model="item.ack_notes"
+                                  @input="snycItems(item,$event)" placeholder="..."></textarea>
+                                <label :for="'NOTES'+item.ack_code">Notes</label>
+                              </div>
+                              <div class="d-flex justify-content-between">
+                                <div class="text-danger"><i class="bi bi-exclamation-triangle-fill"
+                                    v-if="item.ack_requiredtoclose != 'NO'"></i></div>
+                                <button type="button" class="btn btn-sm rounded-circle btn-outline-secondary"
+                                  @click="resetItems(item,$event)"><i class="bi bi-arrow-clockwise"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+            </template>
+          </div>
+        </div>
+      </div>
+      </template>
+    </div>
+  </div>
+  <!-- Optional JavaScript; choose one of the two! -->
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.prod.js"></script>
+  <script src="script.js"></script>
+  <script src="module.js"></script>
+  <script>
+    var payload;
+    var findings;
+    var alert_id = 0;
+    var alert = Vue.createApp(alert_mod).mount("#alert");
+    var form = Vue.createApp(checklist_mod).mount("#form");
+
+    var param;
+    var dux = "com.infor.eam.dux://open?sr=WSJOBS&ds=100156&name=workordernum&value=";
+    var gas = "https://script.google.com/macros/s/AKfycbzFOUbeg3nZnXXO6W4Rq1J4FQ8TPMd0RIdlSsVVyqJRgTxPlPjIAaPb_TKM0dF8cOeULA/exec";
+
+    (function () {
+      param = getAllUrlParams();
+      if (param.workorder == undefined || param.workorder == '' || param.org == undefined || param.org == '' || param.tenant == undefined || param.tenant == '') {
+        alert.add({
+          text: 'incomplete request',
+          type: 'error'
+        });
+        form.broken = true;
+      }
+      else if (['WAU', 'NWA', 'WAR', 'TAS', 'VIC', 'SAU','NSW'].indexOf(param.org) == -1) {
+        alert.add({
+          text: 'This function not applicable for this organization',
+          type: 'error'
+        });
+        form.broken = true;
+      }
+      else {
+        fetch(updateUrl(gas, param))
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (data.status != undefined && data.status === false) {
+              alert.add({
+                text: data.text,
+                type: 'error'
+              });
+              form.broken = true;
+            }
+            else {
+              payload = data;
+              payload.forEach(function (e) {
+                form.addItems(e);
+              });
+            }
+          });
+        var findings_req = new Request(gas + '?process=get_findings&tenant=' + param.tenant, {
+          redirect: "follow",
+          method: 'POST',
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+        });
+        fetch(findings_req)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (data.status != undefined && data.status === false) {
+              alert.add({
+                text: data.text,
+                type: 'error'
+              })
+            }
+            else {
+              findings = data;
+            }
+          })
+      }
+    })();
+  </script>
+</body>
+</html>
