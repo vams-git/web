@@ -108,7 +108,9 @@ var checklist_mod = {
             else { input['ack_value'] = parseInt(input['ack_value'], 10) }
             if (input['ack_uom'] == undefined) { input['ack_uom'] = '' }
             if (input['ack_taskchecklistcode_comments'] == undefined) { input['ack_taskchecklistcode_comments'] = '' }
-            if (input['ack_reference'] == 'PRE') { input['activity'] = 'Pre Start' } else { input['activity'] = 'Post Trip' }
+            if (input['ack_reference'] == 'PRE') { input['activity'] = 'Pre Start' }
+            if (input['ack_reference'] == 'FAULTS') { input['activity'] = 'Faults' }
+            if (input['ack_reference'] == 'POST') { input['activity'] = 'Post Trip' }
             this.raw.push(input)
             if (Object.keys(this.data).length == 0) {
                 var header = {
@@ -151,6 +153,9 @@ var checklist_mod = {
                                 ack_checklistdate: input['ack_checklistdate'],
                                 ack_checklistdatetime: input['ack_checklistdatetime'],
                                 ack_sequence: input['ack_sequence'],
+                                ack_reference: input['ack_reference'],
+                                ack_group_label_desc: input['ack_group_label_desc'],
+                                ack_group_label: input['ack_group_label'],
                                 parentid: input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label'],
                             }],
                         }],
@@ -210,6 +215,9 @@ var checklist_mod = {
                     ack_checklistdate: input['ack_checklistdate'],
                     ack_checklistdatetime: input['ack_checklistdatetime'],
                     ack_sequence: input['ack_sequence'],
+                    ack_reference: input['ack_reference'],
+                    ack_group_label_desc: input['ack_group_label_desc'],
+                    ack_group_label: input['ack_group_label'],
                     parentid: input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label'],
                 });
             }
@@ -240,7 +248,6 @@ var checklist_mod = {
             if (item['ack_desc'] === 'Worker Name' && item['ack_freetext'] !== param.userid) {
                 item['ack_freetext'] = param.userid;
             }
-            if (['', 'Z028', 'Z030'].indexOf(item['ack_finding']) != -1) { item['ack_notes'] = '' }
             raw['ack_notes'] = item['ack_notes'];
             raw['ack_not_applicable'] = item['ack_not_applicable'];
             raw['ack_freetext'] = item['ack_freetext'];
@@ -295,6 +302,58 @@ var checklist_mod = {
             }
             else { return true }
         },
+        getdisplay(item) {
+            if (item.ack_type === '14') { return false }
+            if (item.ack_type === '01'
+                && item.ack_group_label === 'F-200105'
+                && this.raw.filter(
+                    function (e) {
+                        return e.ack_group_label === 'F-200105'
+                            && e.ack_desc === item.ack_desc
+                            && e.ack_completed === '+'
+                    }).map(function (e) { return e.ack_code }).indexOf(item.ack_code) !== -1) { return true }
+            if (item.ack_type === '01'
+                && item.ack_group_label === 'F-200105'
+                && this.raw.filter(
+                    function (e) {
+                        return e.ack_group_label === 'F-200105'
+                            && e.ack_desc === item.ack_desc
+                            && (e.ack_completed === '' || e.ack_completed === '-')
+                    }).map(function (e) { return e.ack_code }).indexOf(item.ack_code) !== -1) { return false }
+            return true
+        },
+        hasTextArea(item) {
+            if (item.ack_type === '01' && item.ack_group_label === 'F-200105') { return true }
+            return false
+        },
+        openFaults() {
+            return this.raw.filter(
+                function (e) {
+                    return e.ack_group_label === 'F-200105'
+                        && e.ack_notes === ''
+                }).filter(
+                    function (e, i, a) {
+                        return e.ack_code === a.filter(
+                            function (f) { return f.ack_desc === e.ack_desc })[0].ack_code
+                    }).map(
+                        function (e) { return { 'text': e.ack_desc, 'value': e.ack_code } })
+        },
+        selectFault(event) {
+            var target = event.target;
+            var selected = target.value;
+            if (selected !== ''
+                && this.raw.filter(function (e) { return e.ack_code === selected && e.ack_completed !== '+' }).length > 0) {
+                document.getElementById('FREE' + selected).click();
+                this.raw.filter(
+                    function (e) {
+                        return e.ack_group_label === 'F-200105'
+                            && e.ack_notes === '' && e.ack_completed === '+' && e.ack_code !== selected
+                    }).forEach(function (e) {
+                        document.getElementById('FREE' + e.ack_code).click();
+                    })
+            }
+            target.value = '';
+        },
         submitForm() {
             var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; send_form(input)
         },
@@ -334,14 +393,17 @@ var checklist_mod = {
                                         && g.ack_no == ''
                                         && g.ack_not_applicable == '');
                                     if ((g.updated === true && g.process === true) || (g.updated === false && g.process === false)) { var updated = true } else { var updated = false }
-                                    collection.push(data && updated)
+                                    collection.push({ res: data && updated, ack_code: g.ack_code })
                                 }
                             )
                         }
                     )
                 }
             );
-            return collection.filter(function (e) { return e }).length === this.raw.length
+            var min_req = this.raw.filter(
+                function (j) { return j.ack_requiredtoclose === 'YES' || (j.ack_requiredtoclose === 'NO' && j.updated === true) }
+            ).map(function (j) { return j.ack_code });
+            return collection.filter(function (e) { return e.res && min_req.indexOf(e.ack_code) !== -1 }).length === min_req.length
         },
         processItems(item) {
             if (item['process'] == false && (Date.now() - item['lastupdate']) >= 3000) {
