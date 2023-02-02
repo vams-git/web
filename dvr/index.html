@@ -6,12 +6,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
   <link href="style.css" rel="stylesheet" />
   <title>VAMS Checklist</title>
   <link rel="icon" href="https://afiqrostam.github.io/vams-checklist/icon.png" size="64x64" type="image/png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 
 <body class="bg-light pt-md-5">
@@ -34,9 +35,9 @@
       </div>
     </div>
     <div v-else>
-      <div class="alert alert-dismissible fade show mb-2">
+      <div class="alert alert-info alert-dismissible fade show mb-2">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <div class="p-3 small">
+        <div class="small">
           <ul class="list-unstyled px-1 m-0">
             <li>When updating, the tickbox on each checklist items indicates:</li>
             <li><i class="bi bi-circle pe-2"></i><span>unanswered checklist;</span></li>
@@ -91,7 +92,8 @@
                         v-bind="{ 'data-bs-target': '#c'+group.id, 'aria-controls': 'c'+group.id }" @click="loadMeta()">
                         <span class="w-100">{{ group.group_label}}</span>
                         <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group) }} of {{
-                          group.items.length}} done )</span>
+                          group.items.filter(function(j){return j.ack_requiredtoclose === 'YES' ||
+                          (j.ack_requiredtoclose === 'NO' && j.updated === true)}).length}} done )</span>
                       </button>
                     </div>
                     <div
@@ -99,7 +101,16 @@
                       class="accordion-collapse collapse">
                       <template v-if="group.items !== undefined">
                         <div class="accordion accordion-flush" :id="group.id">
-                          <div :class="[ item.ack_type == 14 ? 'accordion-item d-none' : 'accordion-item']"
+                          <div class="accordion-item bg-light"
+                            v-if="(group.group_code === 'F-200104' || group.group_code === 'F-200102') && !data.status">
+                            <div class="accordion-body py-2 row">
+                              <span class="hstack text-danger gap-2">
+                                <i class="bi bi-exclamation-circle-fill fs-5"></i>
+                                Enter faults indentified in the Faults section
+                              </span>
+                            </div>
+                          </div>
+                          <div :class="[ getdisplay(item) ? 'accordion-item' : 'accordion-item d-none']"
                             v-for="item in group.items" :key="item.ack_code">
                             <div class="accordion-body py-2 row">
                               <div class="col" v-if="['03','04','13','14','15'].indexOf(item.ack_type) != -1">
@@ -121,10 +132,9 @@
                                   class="form-control border-0 border-bottom" :id="'FREE'+item.ack_code"
                                   autocomplete="off" v-model="item.ack_freetext" @input="snycItems(item)"
                                   :disabled="data.status || ['Unit/Fleet No','Registration No','Worker Name'].indexOf(item.ack_desc) != -1">
-                                <select v-if="item.ack_type == 03" type="checkbox"
-                                  class="form-select border-0 border-bottom" :id="'FREE'+item.ack_code"
-                                  autocomplete="off" v-model="item.ack_finding" @change="snycItems(item)"
-                                  :disabled="data.status">
+                                <select v-if="item.ack_type == 03" class="form-select border-0 border-bottom"
+                                  :id="'FREE'+item.ack_code" autocomplete="off" v-model="item.ack_finding"
+                                  @change="snycItems(item)" :disabled="data.status">
                                   <option disabled value="">select one</option>
                                   <option v-for="option in item.ack_possiblefindings" :value="option.value">
                                     {{ option.text }}
@@ -153,19 +163,6 @@
                                   v-if="getItemCompleted(item) && item.updated && !item.process"></i>
                                 <i class="bi bi-check-circle-fill text-info pe-2"
                                   v-if="getItemCompleted(item) && item.updated && item.process"></i>
-                              </div>
-                              <div class="hstack gap-2 py-2"
-                                v-if="['03'].indexOf(item.ack_type) != -1 && ['','Z028','Z030'].indexOf(item.ack_finding) == -1">
-                                <div class="w-100 form-floating me-auto">
-                                  <textarea :ref="'NOTES'+item.ack_code" :id="'NOTES'+item.ack_code"
-                                    class="form-control" :disabled="data.status" v-model="item.ack_notes"
-                                    @input="snycItems(item,$event)" placeholder="..."></textarea>
-                                  <label class="ps-4" :for="'NOTES'+item.ack_code">Notes</label>
-                                </div>
-                                <button :id="'PHOTO'+item.ack_code" type="button"
-                                  class="btn btn-sm btn-outline-primary">
-                                  <i class="bi bi-camera fs-4"></i>
-                                </button>
                               </div>
                               <div class="hstack gap-2 fw-light" v-if="['01'].indexOf(item.ack_type) != -1">
                                 <div class="" v-if="item.ack_type == '01'">
@@ -196,6 +193,32 @@
                                 <i class="bi bi-check-circle-fill text-info pe-2"
                                   v-if="getItemCompleted(item) && item.updated && item.process"></i>
                               </div>
+                              <div class="hstack gap-2 py-2" v-if="hasTextArea(item)">
+                                <div class="w-100 form-floating me-auto">
+                                  <textarea :ref="'NOTES'+item.ack_code" :id="'NOTES'+item.ack_code"
+                                    :class="[ item.ack_notes == '' ? 'form-control bg-warning-subtle' : 'form-control']"
+                                    :disabled="data.status" v-model="item.ack_notes" @input="snycItems(item,$event)"
+                                    placeholder="..."></textarea>
+                                  <label class="ps-4" :for="'NOTES'+item.ack_code">Notes</label>
+                                </div>
+                                <button :id="'PHOTO'+item.ack_code" type="button"
+                                  class="btn btn-sm btn-outline-primary d-none">
+                                  <i class="bi bi-camera fs-4"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="accordion-item" v-if="group.group_code === 'F-200105' && !data.status">
+                            <div class="accordion-body py-2 row">
+                              <div class="col-md hstack gap-2 fw-light">
+                                <select class="form-select border-0 border-bottom" autocomplete="off"
+                                  @change="selectFault" :disabled="data.status">
+                                  <option value="">select a fault category</option>
+                                  <option v-for="option in openFaults()" :value="option.value">
+                                    {{ option.text }}
+                                  </option>
+                                </select>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -217,9 +240,10 @@
       </div>
       <!-- Optional JavaScript; choose one of the two! -->
       <!-- Option 1: Bootstrap Bundle with Popper -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
+
       <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.prod.js"></script>
       <script src="script.js"></script>
       <script src="module.js"></script>
@@ -243,7 +267,7 @@
           if (new_state === 'Pre-Trip') { new_state = 'PRE' }
           if (new_state === 'Post-Trip') { new_state = 'POST' }
           var new_data = payload.filter(function (e) { return e['ock_code'] == input });
-          if (new_state !== '') { new_data = new_data.filter(function (e) { return e['ack_reference'] == new_state }) }
+          if (new_state !== '') { new_data = new_data.filter(function (e) { return e['ack_reference'] == new_state || e['ack_reference'] === 'FAULTS' }) }
           new_data.forEach(function (e) {
             form.addItems(e);
           });
@@ -334,31 +358,23 @@
             if (form.getAllCompleted()) {
               if (input.reference == 'PRE') { location.reload() }
               else {
-                var payload = {
-                  'tenant': param.tenant,
-                  'chkcode': input.ock_code,
-                  'chktype': 'OPCK',
-                  'chkdataone': 'C',
-                  'chkdatatwo': '',
-                  'chkdatanot': '',
-                  'chkdatanotes': '',
-                  'userid': param.userid
-                }
-
-                var upd_checklist_req = new Request(gas + '?process=upd_checklist', {
+                var req_comp_param = gas + '?process=complete_checklist&tenant=' + param.tenant + '&organization='
+                  + param.organization + '&checklist=' + input.ock_code;
+                if (param.userid !== undefined && param.userid !== '') { req_comp_param = req_comp_param + '&userid=' + param.userid }
+                var upd_checklist_req = new Request(req_comp_param, {
                   redirect: "follow",
                   method: 'POST',
-                  body: JSON.stringify(payload),
                   headers: {
                     "Content-Type": "text/plain;charset=utf-8",
                   },
                 });
-
                 fetch(upd_checklist_req)
                   .then(function (response) {
+                    console.log(JSON.stringify(response));
                     return response.json();
                   })
                   .then(function (data) {
+                    console.log(JSON.stringify(data));
                     if (data.status != undefined && data.status === false) {
                       alert.add({
                         text: data.text,
@@ -458,7 +474,6 @@
                   new_ref.forEach(function (e) {
                     checklist.addItems(e);
                   });
-
                   checklist.loaded = true;
                 }
               });
