@@ -33,9 +33,10 @@
                 <div class="hstack gap-2">
                   <div class="vstack gap-1">
                     <span>{{ dt['evt_desc'] }}</span>
-                    <small class="ms-auto text-muted">{{ dt['evt_status_desc'] }}</small>
+                    <small class="text-muted">{{ dt['evt_status_desc'] }}</small>
                   </div>
-                  <small class="text-muted">{{ get_days(dt) }} days ago</small>
+                  <small v-if="get_days(dt) > 1" class="ms-auto text-muted">{{ get_days(dt) }} days ago</small>
+                  <small v-else class="ms-auto text-muted">{{ get_days(dt) }} day ago</small>
                 </div>
               </div>
             </div>
@@ -81,7 +82,8 @@
                     </a>
                     {{ dt['ock_startdate'] }}
                   </div>
-                  <small class="ms-auto text-muted">{{ get_days(dt) }} days ago</small>
+                  <small v-if="get_days(dt) > 1" class="ms-auto text-muted">{{ get_days(dt) }} days ago</small>
+                  <small v-else class="ms-auto text-muted">{{ get_days(dt) }} day ago</small>
                 </div>
                 <div :id="'FRAME_'+dt['dae_document']"></div>
               </div>
