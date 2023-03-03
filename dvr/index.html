@@ -411,9 +411,12 @@
           var def = payload.filter(
             function (e) { return ['Unit/Fleet No', 'Registration No', 'Worker Name'].indexOf(e.ack_desc) != -1 && e.ock_status == 'U' }).filter(
               function (e) {
-                if (e['ack_desc'] === 'Registration No' && e['ack_freetext'] !== e['obj_udfchar39']) { return e }
-                if (e['ack_desc'] === 'Unit/Fleet No' && e['ack_freetext'] !== e['obj_udfchar16']) { return e }
-                if (e['ack_desc'] === 'Worker Name' && e['ack_freetext'] !== user_details['usr_desc']) { return e }
+                if (e['ack_desc'] === 'Registration No' &&
+                  (e['ack_freetext'] === '' || e['ack_freetext'] === undefined)) { return e }
+                if (e['ack_desc'] === 'Unit/Fleet No' &&
+                  (e['ack_freetext'] === '' || e['ack_freetext'] === undefined)) { return e }
+                if (e['ack_desc'] === 'Worker Name' &&
+                  (e['ack_freetext'] === '' || e['ack_freetext'] === undefined)) { return e }
               });
           if (def.length != 0) {
             def.map(
@@ -423,7 +426,8 @@
           var time = payload.filter(
             function (e) {
               return e.ack_desc === 'Date'
-                && e.ack_checklistdatetime === ''
+                && (e.ack_checklistdatetime === ''
+                  || e.ack_checklistdatetime === undefined)
                 && e.ack_reference == input.reference
                 && e.ock_code == input.ock_code
                 && e.ock_status == 'U'
