@@ -377,7 +377,9 @@ var photo_mod = {
           .then(function (data) {
             form.raw.filter(
               function (f) { return f.ack_code === app_data['data']['checklistid'] })[0].doc_codes = '';
-            app_data.updateList(param, app_data['data']['checklistcode'], { 'close': true });
+            var ock_code = app_data['data']['checklistcode'];
+            document.getElementById('photo_close_btn').click();
+            app_data.updateList(param, ock_code);
           });
       }
       else {
