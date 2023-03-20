@@ -20,10 +20,7 @@ var alert_mod = {
       });
     },
     remove(info) {
-      var data = this.datas;
-      setTimeout(function (data, info) {
-        data = data.filter((t) => t !== info);
-      }, 200, data, info);
+      this.datas = this.datas.filter(function (e) { return e.id !== info.id })
     }
   },
 };
@@ -84,6 +81,308 @@ var open_jobs_mod = {
     getData() {
       var data = this.data;
       return data
+    }
+  }
+}
+
+var photo_mod = {
+  data() {
+    return {
+      'data': {
+        'checklistcode': '',
+        'checklistid': '',
+        'org': '',
+        'photoid': '',
+        'src': '',
+        'loaded': false
+      },
+      'list': false,
+      'loaded': false
+    }
+  },
+  methods: {
+    updateList(url_prm, ock_code, c) {
+      var app_data = this;
+      var p = {
+        'process': 'get_photos',
+        'tenant': url_prm.tenant,
+        'userid': url_prm.userid,
+        'checklist': ock_code
+      }
+      var data_request = new Request(updateUrl(gas, p), {
+        redirect: "follow",
+        method: 'POST',
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+      });
+      fetch(data_request)
+        .then(function (response) { return response.json() })
+        .then(function (data) {
+          if (data.status) {
+            app_data.list = data.text;
+
+            if (data.text.length > 0) {
+              if (c !== undefined && c.close !== undefined) {
+                document.getElementById('photo_close_btn').click();
+                app_data.list.forEach(function (e) {
+                  form.raw.filter(function (f) { return f.ack_code === e.ack_code })[0].doc_codes = e.dae_document;
+                  app_data.getData(url_prm, e.dae_document);
+                });
+              }
+              if (c !== undefined && c.close === undefined) {
+                if (data.text.filter(function (e) { return e.ack_code === c.id }).length === 0) {
+                  app_data.list.forEach(function (e) {
+                    form.raw.filter(function (f) { return f.ack_code === e.ack_code })[0].doc_codes = e.dae_document;
+                    app_data.getData(url_prm, e.dae_document);
+                  });
+                  app_data.addChecklist(c.id, ock_code, c.org);
+                }
+                else {
+                  app_data.list.forEach(
+                    function (e) {
+                      form.raw.filter(function (f) { return f.ack_code === e.ack_code })[0].doc_codes = e.dae_document;
+                      if (c !== undefined && c.id === e.ack_code) {
+                        app_data.getData(url_prm, e.dae_document, {
+                          id: e.ack_code,
+                          checklist: e.ock_code,
+                          org: e.ock_org
+                        })
+                      }
+                      else { app_data.getData(url_prm, e.dae_document) }
+                    });
+                }
+              }
+              else {
+                app_data.list.forEach(function (e) {
+                  form.raw.filter(function (f) { return f.ack_code === e.ack_code })[0].doc_codes = e.dae_document;
+                  app_data.getData(url_prm, e.dae_document)
+                });
+              }
+            }
+            else {
+              if (c !== undefined && c.close !== undefined) {
+                document.getElementById('photo_close_btn').click();
+              }
+              if (c !== undefined && c.close === undefined) { app_data.addChecklist(c.id, ock_code, c.org) }
+            }
+          }
+          else {
+            app_data.list = [];
+            if (c !== undefined) { app_data.addChecklist(c.id, ock_code, c.org) }
+          }
+        });
+    },
+    getData(param, doc_id, c) {
+      var app_data = this;
+      var p = {
+        'process': 'download_doc_attachment',
+        'tenant': param.tenant,
+        'doc_id': doc_id
+      }
+
+      var data_request = new Request(updateUrl(gas, p), {
+        redirect: "follow",
+        method: 'POST',
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+      });
+      fetch(data_request)
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          if (data.status) {
+            var node_list = app_data.list.filter(function (e) { return e.dae_document == data.text.doc_id });
+            if (node_list.length === 1 && data.text.base !== '' && data.text.base !== undefined) {
+
+              node_list[0].src = 'data:image/jpeg;base64,' + data.text.base;
+
+              if (c !== undefined) {
+                app_data.addChecklist(c.id, c.checklist, c.org)
+              }
+            }
+            else {
+              if (c !== undefined) {
+                app_data.addChecklist(c.id, c.checklist, c.org)
+              }
+            }
+          }
+          else {
+            console.log(data.text);
+            if (c !== undefined) { app_data.addChecklist(c.id, c.checklist, c.org) }
+          }
+        });
+    },
+    addChecklist(id, checklist, org) {
+      var app_data = this;
+      app_data['data']['checklistcode'] = checklist;
+      app_data['data']['checklistid'] = id;
+      app_data['data']['org'] = org;
+      app_data['data']['loaded'] = true;
+      app_data.loaded = true;
+      if (app_data['list'] === false) { app_data.updateList(param, checklist, { 'id': id, 'org': org }) }
+      else {
+        var getData = app_data['list'].filter(function (e) { return e.ack_code === id });
+        if (getData.length === 1
+          && getData[0].src !== undefined
+          && getData[0].src !== '') {
+          app_data['data']['photoid'] = getData[0].dae_document;
+          app_data['data']['src'] = getData[0].src;
+          app_data['data']['loaded'] = false;
+        }
+        else if (getData.length === 1
+          && (getData[0].src === undefined || getData[0].src == '')
+          && getData[0].dae_document !== undefined) {
+          app_data.getData(param, getData[0].dae_document, { 'id': id, 'org': org })
+        }
+        else {
+          app_data['data']['photoid'] = '';
+          app_data['data']['src'] = '';
+          app_data['data']['loaded'] = false;
+        }
+      }
+    },
+    getChecklistStatus() {
+      return form.data.status
+    },
+    closeModal() {
+      this['data']['checklistcode'] = '';
+      this['data']['checklistid'] = '';
+      this['data']['org'] = '';
+      this['data']['photoid'] = '';
+      this['data']['src'] = '';
+      this['data']['loaded'] = false;
+      this.loaded = false;
+    },
+    resizeImg(img, maxWidth) {
+      var width = img.width;
+      var height = img.height;
+      if (width >= height) {
+        var maxVal = {
+          l: width,
+          a: 'x',
+          r: height / width
+        }
+      }
+      else {
+        var maxVal = {
+          l: height,
+          a: 'y',
+          r: width / height
+        }
+      }
+      if (maxVal.l >= maxWidth) {
+        if (maxVal.a == 'x') {
+          width = maxWidth;
+          height = maxVal.r * maxWidth
+        }
+        else {
+          height = maxWidth;
+          width = maxVal.r * maxWidth
+        }
+      }
+      return [width, height];
+    },
+    processImg(event) {
+      var app_data_ = this;
+      if (!app_data_.getChecklistStatus()) {
+        var old_ = app_data_.data.src;
+        var file = event.target.files[0];
+        app_data_.data.loaded = true;
+        var blobURL = URL.createObjectURL(file);
+        var img = new Image();
+        img.src = blobURL;
+        img.onerror = function () {
+          URL.revokeObjectURL(this.src);
+          app_data_.data.src = old_;
+          app_data_.data.loaded = false;
+        };
+        img.onload = function () {
+          URL.revokeObjectURL(this.src);
+          var [newWidth, newHeight] = app_data_.resizeImg(img, 1600);
+          var canvas = document.createElement('canvas');
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+          app_data_.data.src = canvas.toDataURL('image/jpeg', 0.8);
+          app_data_.data.loaded = false;
+        }
+      }
+    },
+    openFile() { if (!this.getChecklistStatus()) { document.getElementById('new_photo_btn').click() } },
+    uploadPhoto() {
+      var app_data = this;
+      app_data['data']['loaded'] = true;
+      if (app_data['data']['photoid'] === '') {
+        var p = {
+          'process': 'create_photo_record',
+          'tenant': param.tenant,
+          'userid': param.userid,
+          'organization': app_data['data']['org'],
+          'checklist': app_data['data']['checklistid']
+        }
+      }
+      else {
+        var p = {
+          'process': 'update_photo_attachment',
+          'tenant': param.tenant,
+          'userid': param.userid,
+          'doc_id': app_data['data']['photoid']
+        }
+      }
+      var file = { 'file': app_data['data']['src'] }
+      var data_request = new Request(updateUrl(gas, p), {
+        redirect: "follow",
+        method: 'POST',
+        body: JSON.stringify(file),
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+      });
+      fetch(data_request)
+        .then(function (response) { return response.json() })
+        .then(function (data) {
+          if (p['process'] === 'create_photo_record') {
+            app_data.updateList(param, app_data['data']['checklistcode'], { 'close': true })
+          }
+          else {
+            app_data.getData(param, app_data['data']['photoid']);
+            document.getElementById('photo_close_btn').click();
+          }
+        });
+    },
+    deletePhoto() {
+      var app_data = this;
+      app_data['data']['loaded'] = true;
+      if (app_data['data']['photoid'] !== '' && app_data['data']['checklistid'] !== '') {
+        var p = {
+          'process': 'delete_photo',
+          'tenant': param.tenant,
+          'userid': param.userid,
+          'doc_id': app_data['data']['photoid'],
+          'checklist': app_data['data']['checklistid']
+        };
+        var data_request = new Request(updateUrl(gas, p), {
+          redirect: "follow",
+          method: 'POST',
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+        });
+        fetch(data_request)
+          .then(function (response) { return response.json() })
+          .then(function (data) {
+            form.raw.filter(
+              function (f) { return f.ack_code === app_data['data']['checklistid'] })[0].doc_codes = '';
+            app_data.updateList(param, app_data['data']['checklistcode'], { 'close': true });
+          });
+      }
+      else {
+        document.getElementById('photo_close_btn').click();
+      }
     }
   }
 }
@@ -150,8 +449,8 @@ var past_dvr_mod = {
           if (container.childElementCount > 0) { container.innerHTML = '' }
           else {
             var iframe = document.createElement('iframe');
-            iframe.setAttribute('class', 'w-100 rounded vh-100');
-            iframe.src = input.url;
+            iframe.setAttribute('class', 'w-100 rounded min-vh-100');
+            iframe.src = input.url + '#zoom=FitW';
             container.appendChild(iframe);
           }
         }
@@ -333,6 +632,11 @@ var checklist_mod = {
         });
       }
     },
+    getOptionHTML(option) {
+      if (option === 'Z028') { return '<i class="bi bi-check-lg"></i>' }
+      if (option === 'Z029') { return '<i class="bi bi-x-lg"></i>' }
+      if (option === 'Z030') { return '<i class="bi bi-slash-lg"></i>' }
+    },
     expandTextArea(event) {
       var target = event.target;
       if (target.tagName != 'button') { target = target.closest('button') }
@@ -341,6 +645,37 @@ var checklist_mod = {
       text_area.style.height = 'auto';
       text_area.style.height = (text_area.scrollHeight) + 'px'
     },
+    getStartReading(item) {
+      if (item.ack_desc.search(new RegExp('Odometer/Hub', 'gi')) === -1
+        && item.ack_desc.search(new RegExp('Hour Meter', 'gi')) === -1) {
+        return ''
+      }
+      else {
+        var wo = this.data.wo;
+        if (item.ack_desc.search(new RegExp('start', 'gi')) === -1) {
+          if (item.ack_desc.search(new RegExp('Odometer/Hub', 'gi')) !== -1) {
+            return payload.filter(
+              function (e) {
+                return e.ock_code == wo
+                  && e.ack_desc.search(new RegExp('Odometer/Hub', 'gi')) !== -1
+                  && e.ack_desc.search(new RegExp('start', 'gi')) !== -1
+              })[0].ack_value
+          }
+          else {
+            return payload.filter(
+              function (e) {
+                return e.ock_code == wo
+                  && e.ack_desc.search(new RegExp('Hour Meter', 'gi')) !== -1
+                  && e.ack_desc.search(new RegExp('start', 'gi')) !== -1
+              })[0].ack_value
+          }
+        }
+        else {
+          return ''
+        }
+      }
+    },
+    openPhoto(item) { photo_mgmt.addChecklist(item.ack_code, this.data.wo, this.data.org) },
     snycItems(item, event) {
       if (event != undefined) {
         if (event.target.nodeName == 'TEXTAREA') {
@@ -413,6 +748,13 @@ var checklist_mod = {
       }
       else { return true }
     },
+    getPhotoId(itemid) {
+      var id = this.raw.filter(function (e) {
+        return e.ack_code == itemid
+      });
+      if (id[0].doc_codes !== undefined && id[0].doc_codes !== '') { return id[0].doc_codes }
+      else { return '' }
+    },
     getdisplay(item) {
       if (item.ack_type === '14') { return false }
       if (item.ack_type === '01'
@@ -448,6 +790,15 @@ var checklist_mod = {
               function (f) { return f.ack_desc === e.ack_desc })[0].ack_code
           }).map(
             function (e) { return { 'text': e.ack_desc, 'value': e.ack_code } })
+    },
+    showFaultRequired(id) {
+      if (id.search('FAULTS') === -1) { return true }
+      else {
+        return this.raw.filter(
+          function (e) {
+            return e.ack_possiblefindings !== '' && e.ack_finding !== ''
+          }).length > 0
+      }
     },
     selectFault(event) {
       var target = event.target;

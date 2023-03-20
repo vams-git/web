@@ -47,8 +47,28 @@
   min-height: 75vh !important;
 }
 
+.min-vh-50 {
+  min-height: 50vh !important;
+}
+
 .big {
   font-size: 10rem;
+}
+
+.big-2 {
+  font-size: 8rem;
+}
+
+.big-3 {
+  font-size: 6rem;
+}
+
+.big-4 {
+  font-size: 4rem;
+}
+
+.big-5 {
+  font-size: 2rem;
 }
 
 .form-static.accordion-button::after {
