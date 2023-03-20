@@ -699,7 +699,7 @@ var checklist_mod = {
       raw['ack_freetext'] = item['ack_freetext'];
       raw['ack_checklistdate'] = item['ack_checklistdate'];
       raw['ack_checklistdatetime'] = item['ack_checklistdatetime'];
-      if (isNaN(parseInt(item['ack_value'], 10))) { item['ack_value'] = ' ' }
+      if (isNaN(parseInt(item['ack_value'], 10))) { item['ack_value'] = '' }
       raw['ack_value'] = item['ack_value'];
       raw['ack_yes'] = item['ack_yes'];
       if (item['ack_yes'] == '-') { item['ack_no'] = '+' }
