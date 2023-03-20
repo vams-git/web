@@ -427,37 +427,37 @@
     crossorigin="anonymous"></script>
 
   <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.prod.js"></script>
-      <script src="script.js"></script>
-      <script src="module.js"></script>
-      <script>
+  <script src="script.js"></script>
+  <script src="module.js"></script>
+  <script>
 
-        var payload = [];
-        var list = [];
-        var metadata = [];
-        var findings;
-        var user_details;
-        var equipment_details;
-        var open_jobs;
-        var dvr_forms;
-        var alert_id = 0;
-        var alert = Vue.createApp(alert_mod).mount("#alert");
-        var checklist = Vue.createApp(form_mod).mount("#check");
-        var form = Vue.createApp(checklist_mod).mount("#form");
-        var photo_mgmt = Vue.createApp(photo_mod).mount("#photomodal");
-        var jobs_mgmt = Vue.createApp(open_jobs_mod).mount("#openjobmodal");
-        var job_button = document.getElementById('openjobmodalbutton');
-        job_button.addEventListener("click", function (event) { jobs_mgmt.loaded = true });
-    
-    
-        var dvr_mgmt = Vue.createApp(past_dvr_mod).mount("#pastdvrmodal");
-        var dvr_button = document.getElementById('pastdvrmodalbutton');
-        dvr_button.addEventListener("click", function (event) { dvr_mgmt.loaded = true });
-    
-        var param;
-        var start = false;
-        var gas = "https://script.google.com/macros/s/AKfycbzSznniNEh_L5YP4ESIrZVkvY0U6NCy3_0bnpnGBt6_uUWeUfcM3W6X9MrBX3y7hOi82w/exec";
+    var payload = [];
+    var list = [];
+    var metadata = [];
+    var findings;
+    var user_details;
+    var equipment_details;
+    var open_jobs;
+    var dvr_forms;
+    var alert_id = 0;
+    var alert = Vue.createApp(alert_mod).mount("#alert");
+    var checklist = Vue.createApp(form_mod).mount("#check");
+    var form = Vue.createApp(checklist_mod).mount("#form");
+    var photo_mgmt = Vue.createApp(photo_mod).mount("#photomodal");
+    var jobs_mgmt = Vue.createApp(open_jobs_mod).mount("#openjobmodal");
+    var job_button = document.getElementById('openjobmodalbutton');
+    job_button.addEventListener("click", function (event) { jobs_mgmt.loaded = true });
 
-        function build_form(input) {
+
+    var dvr_mgmt = Vue.createApp(past_dvr_mod).mount("#pastdvrmodal");
+    var dvr_button = document.getElementById('pastdvrmodalbutton');
+    dvr_button.addEventListener("click", function (event) { dvr_mgmt.loaded = true });
+
+    var param;
+    var start = false;
+    var gas = "https://script.google.com/macros/s/AKfycbzSznniNEh_L5YP4ESIrZVkvY0U6NCy3_0bnpnGBt6_uUWeUfcM3W6X9MrBX3y7hOi82w/exec";
+
+    function build_form(input) {
       var new_state = list.filter(function (e) { return e['ock_code'] == input })[0].state;
       if (new_state === 'Pre-Trip') { new_state = 'PRE' }
       if (new_state === 'Post-Trip') { new_state = 'POST' }
