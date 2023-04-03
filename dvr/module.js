@@ -824,6 +824,7 @@ var checklist_mod = {
     cancelForm() {
       var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; cancel_form(input)
     },
+    closeForm() { location.reload() },
     loadMeta() { var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; loadmetadata(input) },
     getGroupCompleted(group) {
       return group.items.filter(function (item) {
