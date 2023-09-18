@@ -394,6 +394,7 @@ var past_dvr_mod = {
     return {
       data: [],
       loaded: false,
+      queue: [],
     }
   },
   methods: {
