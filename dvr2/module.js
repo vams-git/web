@@ -418,7 +418,8 @@ var past_dvr_mod = {
       this.current = val
     },
     getCurrent() {
-      return test.filter(function (e, i) {
+      var current = this.current;
+      return this.data.filter(function (e, i) {
         if (Math.floor(i / 5) === current - 1) { return e }
       })
     },
