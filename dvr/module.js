@@ -424,6 +424,7 @@ var past_dvr_mod = {
           else {
             var fetch = dvr_mgmt.getData().filter(function (e) { return e.dae_document == data.text.doc_id });
             if (fetch.length === 1) {
+              console.log(fetch);
               fetch[0].url = 'data:application/pdf;base64,' + data.text.base;
             }
           }
