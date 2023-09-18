@@ -76,7 +76,7 @@ var open_jobs_mod = {
       if (count % this.size > 0) { this.maxCount = this.maxCount + 1 }
     },
     addCount() {
-      if (this.counter < this.maxCount) { this.counter = this.counter + 1 }
+      if (this.counter + 5 < this.maxCount) { this.counter = this.counter + 1 }
       if (this.counter + 1 > this.current) { this.setCurrent(this.current + 1) }
     },
     delCount() {
@@ -436,7 +436,7 @@ var past_dvr_mod = {
       if (count % this.size > 0) { this.maxCount = this.maxCount + 1 }
     },
     addCount() {
-      if (this.counter < this.maxCount) { this.counter = this.counter + 1 }
+      if (this.counter + 5 < this.maxCount) { this.counter = this.counter + 1 }
       if (this.counter + 1 > this.current) { this.setCurrent(this.current + 1) }
     },
     delCount() {
