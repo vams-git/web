@@ -44,8 +44,8 @@
             </div>
           </div>
           <div class="modal-body ">
-            <nav aria-label="Page navigation example">
-              <ul class="pagination">
+            <nav>
+              <ul class="pagination justify-content-center">
                 <li :class="counter <= 0 ?'page-item disabled':'page-item'" @click="delCount">
                   <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
@@ -159,8 +159,8 @@
             </div>
           </div>
           <div class="modal-body ">
-            <nav aria-label="Page navigation example">
-              <ul class="pagination">
+            <nav>
+              <ul class="pagination justify-content-center">
                 <li :class="counter <= 0 ?'page-item disabled':'page-item'" @click="delCount">
                   <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
@@ -690,7 +690,7 @@
         month: "short",
         day: "numeric"
       };
-      var orgs = ['TAS', 'VIC', 'WAR', 'WAU', 'NWA', 'SAU', 'NSW'];
+      var orgs = ['TAS', 'WAU', 'NWA', 'WAR', 'SAU', 'VIC', 'NSW', 'TAS', 'NTE'];
       var options = {};
       orgs.forEach(function (e) {
         options[e] = JSON.parse(JSON.stringify(option))
@@ -702,6 +702,8 @@
       options['NWA']['timeZone'] = 'Australia/Perth';
       options['SAU']['timeZone'] = 'Australia/Adelaide';
       options['NSW']['timeZone'] = 'Australia/Sydney';
+      options['QLD']['timeZone'] = 'Australia/Brisbane';
+      options['NTE']['timeZone'] = 'Australia/Darwin';
       return (date).toLocaleString('en-GB', options[org]).toUpperCase()
     }
 

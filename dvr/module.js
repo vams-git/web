@@ -61,6 +61,10 @@ var open_jobs_mod = {
     return {
       data: [],
       loaded: false,
+      counter: 0,
+      current: 1,
+      maxCount: 1,
+      size: 10,
     }
   },
   methods: {
@@ -68,6 +72,26 @@ var open_jobs_mod = {
       this.data.push(input);
       var count = this.data.length;
       document.getElementById('openjobmodalcount').innerHTML = count;
+      this.maxCount = Math.floor(count / this.size);
+      if (count % this.size > 0) { this.maxCount = this.maxCount + 1 }
+    },
+    addCount() {
+      if (this.counter + 5 < this.maxCount) { this.counter = this.counter + 1 }
+      if (this.counter + 1 > this.current) { this.setCurrent(this.current + 1) }
+    },
+    delCount() {
+      if (this.counter > 0) { this.counter = this.counter - 1 }
+      if (this.counter < this.current - 5) { this.setCurrent(this.current - 1) }
+    },
+    setCurrent(val) {
+      this.current = val
+    },
+    getCurrent() {
+      var current = this.current;
+      var size = this.size;
+      return this.data.filter(function (e, i) {
+        if (Math.floor(i / size) === current - 1) { return e }
+      })
     },
     closeModal() { this.loaded = false },
     get_days(item) {
@@ -394,17 +418,41 @@ var past_dvr_mod = {
     return {
       data: [],
       loaded: false,
+      counter: 0,
+      current: 1,
+      maxCount: 1,
+      size: 10,
       queue: [],
     }
   },
   methods: {
-    addItems(input,gas) {
+    addItems(input, gas) {
       this.data.push(input);
       var count = this.data.length;
       document.getElementById('pastdvrmodalcount').innerHTML = count;
       var doc_id = input.dae_document;
       this.queue.push(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
-      '&doc_id=' + input.dae_document);
+        '&doc_id=' + input.dae_document);
+      this.maxCount = Math.floor(count / this.size);
+      if (count % this.size > 0) { this.maxCount = this.maxCount + 1 }
+    },
+    addCount() {
+      if (this.counter + 5 < this.maxCount) { this.counter = this.counter + 1 }
+      if (this.counter + 1 > this.current) { this.setCurrent(this.current + 1) }
+    },
+    delCount() {
+      if (this.counter > 0) { this.counter = this.counter - 1 }
+      if (this.counter < this.current - 5) { this.setCurrent(this.current - 1) }
+    },
+    setCurrent(val) {
+      this.current = val
+    },
+    getCurrent() {
+      var current = this.current;
+      var size = this.size;
+      return this.data.filter(function (e, i) {
+        if (Math.floor(i / size) === current - 1) { return e }
+      })
     },
     getQueue() {
       var past_dvr = this;
@@ -497,6 +545,8 @@ var checklist_mod = {
       input['updated'] = false;
       input['process'] = false;
       input['wo'] = 'WO' + input['ock_code'];
+
+      input['lastupdate'] = Date.now();
       if (input['ack_completed'] == undefined) { input['ack_completed'] = '' }
       if (input['ack_finding'] == undefined) { input['ack_finding'] = '' }
       if (input['ack_possiblefindings'] == undefined) { input['ack_possiblefindings'] = '' }
@@ -551,6 +601,7 @@ var checklist_mod = {
               items: [{
                 updated: input['updated'],
                 process: input['process'],
+                lastupdate: input['lastupdate'],
                 ack_code: input['ack_code'],
                 ack_desc: input['ack_desc'],
                 ack_taskchecklistcode_comments: input['ack_taskchecklistcode_comments'],
@@ -613,6 +664,7 @@ var checklist_mod = {
         this.data.activities[activity].groups[group].items.push({
           updated: input['updated'],
           process: input['process'],
+          lastupdate: input['lastupdate'],
           ack_code: input['ack_code'],
           ack_desc: input['ack_desc'],
           ack_taskchecklistcode_comments: input['ack_taskchecklistcode_comments'],
@@ -686,6 +738,7 @@ var checklist_mod = {
     },
     openPhoto(item) { photo_mgmt.addChecklist(item.ack_code, this.data.wo, this.data.org) },
     snycItems(item, event) {
+      console.log(item)
       if (event != undefined) {
         if (event.target.nodeName == 'TEXTAREA') {
           event.target.style.height = 'auto'
@@ -723,6 +776,7 @@ var checklist_mod = {
       item['updated'] = raw['updated'] = true;
       item['process'] = raw['process'] = false;
       item['lastupdate'] = raw['lastupdate'] = Date.now();
+
       setTimeout(function (item) { form.processItems(item) }, 3000, item)
     },
     resetItems(item, event) {
