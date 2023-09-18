@@ -861,6 +861,7 @@ var checklist_mod = {
                     && g.ack_yes == ''
                     && g.ack_no == ''
                     && g.ack_not_applicable == '');
+                  if (g.ack_requiredtoclose === 'NO') { data = true }
                   if ((g.updated === true && g.process === true) || (g.updated === false && g.process === false)) { var updated = true } else { var updated = false }
                   collection.push({ res: data && updated, ack_code: g.ack_code })
                 }
