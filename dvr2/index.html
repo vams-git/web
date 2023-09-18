@@ -124,6 +124,23 @@
               </div>
             </div>
           </div>
+          <div class="modal-body"><nav class="" aria-label="Page navigation example">
+            <ul class="pagination">
+              <li :class="count === 0 ?'page-item disabled':'page-item']" @click="countup">
+                <a class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">«</span>
+                </a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li :class="count === data.length ?'d-none':'page-item']" @click="countdown">
+                <a class="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">»</span>
+                </a>
+              </li>
+            </ul>
+          </nav></div>
           <div class="modal-footer">
             <button type="button" @click="closeModal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>

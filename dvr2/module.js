@@ -395,6 +395,7 @@ var past_dvr_mod = {
       data: [],
       loaded: false,
       queue: [],
+      count: 0,
     }
   },
   methods: {
@@ -405,6 +406,14 @@ var past_dvr_mod = {
       var doc_id = input.dae_document;
       this.queue.push(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
       '&doc_id=' + input.dae_document);
+    },
+    countup() {
+      this.count++
+      console.log(this.count)
+    },
+    countdown() {
+      this.count--
+      console.log(this.count)
     },
     getQueue() {
       var past_dvr = this;
@@ -497,6 +506,8 @@ var checklist_mod = {
       input['updated'] = false;
       input['process'] = false;
       input['wo'] = 'WO' + input['ock_code'];
+      
+      input['lastupdate'] = Date.now();
       if (input['ack_completed'] == undefined) { input['ack_completed'] = '' }
       if (input['ack_finding'] == undefined) { input['ack_finding'] = '' }
       if (input['ack_possiblefindings'] == undefined) { input['ack_possiblefindings'] = '' }
@@ -551,6 +562,7 @@ var checklist_mod = {
               items: [{
                 updated: input['updated'],
                 process: input['process'],
+                lastupdate: input['lastupdate'],
                 ack_code: input['ack_code'],
                 ack_desc: input['ack_desc'],
                 ack_taskchecklistcode_comments: input['ack_taskchecklistcode_comments'],
@@ -613,6 +625,7 @@ var checklist_mod = {
         this.data.activities[activity].groups[group].items.push({
           updated: input['updated'],
           process: input['process'],
+          lastupdate: input['lastupdate'],
           ack_code: input['ack_code'],
           ack_desc: input['ack_desc'],
           ack_taskchecklistcode_comments: input['ack_taskchecklistcode_comments'],
