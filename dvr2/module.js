@@ -76,7 +76,8 @@ var open_jobs_mod = {
       if (count % this.size > 0) { this.maxCount = this.maxCount + 1 }
     },
     addCount() {
-      if (this.counter < this.data.length) { this.counter = this.counter + 1 }
+      if (this.counter < this.maxCount) { this.counter = this.counter + 1 }
+      if (this.counter + 1 > current) { current + 1 }
     },
     delCount() {
       if (this.counter > 0) { this.counter = this.counter - 1 }

@@ -46,23 +46,30 @@
           <div class="modal-body ">
             <nav aria-label="Page navigation example">
               <ul class="pagination">
-                <li :class="counter <= 0 ?'d-none':'page-item'" @click="delCount">
+                <li :class="counter <= 0 ?'page-item disabled':'page-item'" @click="delCount">
                   <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
-                <li v-show="counter + 1  <= maxCount" :class="(counter + 1 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 1)">
-                  <a class="page-link" href="#">{{counter + 1}}</a></li>
-                <li v-show="counter + 2  <= maxCount"
-                  :class="(counter + 2 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 2)"><a
-                    class="page-link" href="#">{{counter + 2}}</a></li>
-                <li v-show="counter + 3  <= maxCount" :class="(counter + 3 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 3)">
-                  <a class="page-link" href="#">{{counter + 3}}</a></li>
-                <li v-show="counter + 4  <= maxCount" :class="(counter + 4 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 4)">
-                  <a class="page-link" href="#">{{counter + 4}}</a></li>
-                <li v-show="counter + 5  <= maxCount" :class="(counter + 5 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 5)">
-                  <a class="page-link" href="#">{{counter + 5}}</a></li>
-                <li :class="counter + 5  >= maxCount ?'d-none':'page-item'" @click="addCount">
+                <li v-show="counter + 1  <= maxCount" :class="(counter + 1 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 1)">
+                  <a class="page-link" href="#">{{counter + 1}}</a>
+                </li>
+                <li v-show="counter + 2  <= maxCount" :class="(counter + 2 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 2)"><a class="page-link" href="#">{{counter + 2}}</a></li>
+                <li v-show="counter + 3  <= maxCount" :class="(counter + 3 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 3)">
+                  <a class="page-link" href="#">{{counter + 3}}</a>
+                </li>
+                <li v-show="counter + 4  <= maxCount" :class="(counter + 4 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 4)">
+                  <a class="page-link" href="#">{{counter + 4}}</a>
+                </li>
+                <li v-show="counter + 5  <= maxCount" :class="(counter + 5 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 5)">
+                  <a class="page-link" href="#">{{counter + 5}}</a>
+                </li>
+                <li :class="counter + 5  >= maxCount ?'page-item disabled':'page-item'" @click="addCount">
                   <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
@@ -154,23 +161,30 @@
           <div class="modal-body ">
             <nav aria-label="Page navigation example">
               <ul class="pagination">
-                <li :class="counter <= 0 ?'d-none':'page-item'" @click="delCount">
+                <li :class="counter <= 0 ?'page-item disabled':'page-item'" @click="delCount">
                   <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
-                <li v-show="counter + 1  <= maxCount" :class="(counter + 1 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 1)">
-                  <a class="page-link" href="#">{{counter + 1}}</a></li>
-                <li v-show="counter + 2  <= maxCount"
-                  :class="(counter + 2 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 2)"><a
-                    class="page-link" href="#">{{counter + 2}}</a></li>
-                <li v-show="counter + 3  <= maxCount" :class="(counter + 3 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 3)">
-                  <a class="page-link" href="#">{{counter + 3}}</a></li>
-                <li v-show="counter + 4  <= maxCount" :class="(counter + 4 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 4)">
-                  <a class="page-link" href="#">{{counter + 4}}</a></li>
-                <li v-show="counter + 5  <= maxCount" :class="(counter + 5 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 5)">
-                  <a class="page-link" href="#">{{counter + 5}}</a></li>
-                <li :class="counter + 5  >= maxCount ?'d-none':'page-item'" @click="addCount">
+                <li v-show="counter + 1  <= maxCount" :class="(counter + 1 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 1)">
+                  <a class="page-link" href="#">{{counter + 1}}</a>
+                </li>
+                <li v-show="counter + 2  <= maxCount" :class="(counter + 2 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 2)"><a class="page-link" href="#">{{counter + 2}}</a></li>
+                <li v-show="counter + 3  <= maxCount" :class="(counter + 3 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 3)">
+                  <a class="page-link" href="#">{{counter + 3}}</a>
+                </li>
+                <li v-show="counter + 4  <= maxCount" :class="(counter + 4 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 4)">
+                  <a class="page-link" href="#">{{counter + 4}}</a>
+                </li>
+                <li v-show="counter + 5  <= maxCount" :class="(counter + 5 ) == current ?'page-item active':'page-item'"
+                  @click="setCurrent(counter + 5)">
+                  <a class="page-link" href="#">{{counter + 5}}</a>
+                </li>
+                <li :class="counter + 5  >= maxCount ?'page-item disabled':'page-item'" @click="addCount">
                   <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
