@@ -62,7 +62,7 @@
                   <a class="page-link" href="#">{{counter + 4}}</a></li>
                 <li v-show="counter + 5  <= maxCount" :class="(counter + 5 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 5)">
                   <a class="page-link" href="#">{{counter + 5}}</a></li>
-                <li :class="counter + 5  > maxCount ?'d-none':'page-item'" @click="addCount">
+                <li :class="counter + 5  >= maxCount ?'d-none':'page-item'" @click="addCount">
                   <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
@@ -170,7 +170,7 @@
                   <a class="page-link" href="#">{{counter + 4}}</a></li>
                 <li v-show="counter + 5  <= maxCount" :class="(counter + 5 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 5)">
                   <a class="page-link" href="#">{{counter + 5}}</a></li>
-                <li :class="counter + 5  > maxCount ?'d-none':'page-item'" @click="addCount">
+                <li :class="counter + 5  >= maxCount ?'d-none':'page-item'" @click="addCount">
                   <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
