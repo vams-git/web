@@ -396,6 +396,7 @@ var past_dvr_mod = {
       loaded: false,
       counter: 0,
       current: 1,
+      size: 10,
       queue: [],
     }
   },
@@ -419,8 +420,9 @@ var past_dvr_mod = {
     },
     getCurrent() {
       var current = this.current;
+      var size = this.size;
       return this.data.filter(function (e, i) {
-        if (Math.floor(i / 5) === current - 1) { return e }
+        if (Math.floor(i / size) === current - 1) { return e }
       })
     },
     getQueue() {
