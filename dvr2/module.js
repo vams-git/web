@@ -409,8 +409,8 @@ var past_dvr_mod = {
       var doc_id = input.dae_document;
       this.queue.push(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
         '&doc_id=' + input.dae_document);
-      this.maxCount = Math.floor(count / size);
-      if (count % size > 0) { this.maxCount = this.maxCount + 1 }
+      this.maxCount = Math.floor(count / this.size);
+      if (count % this.size > 0) { this.maxCount = this.maxCount + 1 }
     },
     addCount() {
       if (this.counter < this.data.length) { this.counter = this.counter + 1 }
