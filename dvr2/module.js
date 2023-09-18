@@ -395,7 +395,6 @@ var past_dvr_mod = {
       data: [],
       loaded: false,
       queue: [],
-      count: 0,
     }
   },
   methods: {
@@ -406,12 +405,6 @@ var past_dvr_mod = {
       var doc_id = input.dae_document;
       this.queue.push(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
         '&doc_id=' + input.dae_document);
-    },
-    countUp() {
-      this.count = this.count + 1
-    },
-    countDown() {
-      this.count = this.count - 1
     },
     getQueue() {
       var past_dvr = this;
