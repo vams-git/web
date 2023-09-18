@@ -875,7 +875,7 @@
                   else {
                     dvr_forms = data.text;
                     dvr_forms.forEach(function (e) {
-                      dvr_mgmt.addItems(e);
+                      dvr_mgmt.addItems(e,gas);
                     });
                     dvr_mgmt.getQueue();
                     var count = dvr_mgmt.getData().length;

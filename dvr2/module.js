@@ -397,7 +397,7 @@ var past_dvr_mod = {
     }
   },
   methods: {
-    addItems(input) {
+    addItems(input,gas) {
       this.data.push(input);
       var count = this.data.length;
       document.getElementById('pastdvrmodalcount').innerHTML = count;
