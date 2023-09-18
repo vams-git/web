@@ -410,10 +410,10 @@ var past_dvr_mod = {
         '&doc_id=' + input.dae_document);
     },
     addCount() {
-      this.counter = this.counter + 1
+      if (this.counter < this.data.length) { this.counter = this.counter + 1 }
     },
     delCount() {
-      this.counter = this.counter - 1
+      if (this.counter > 0) { this.counter = this.counter - 1 }
     },
     setCurrent(val) {
       this.current = val
