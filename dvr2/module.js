@@ -399,20 +399,20 @@ var past_dvr_mod = {
     }
   },
   methods: {
-    addItems(input,gas) {
+    addItems(input, gas) {
       this.data.push(input);
       var count = this.data.length;
       document.getElementById('pastdvrmodalcount').innerHTML = count;
       var doc_id = input.dae_document;
       this.queue.push(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
-      '&doc_id=' + input.dae_document);
+        '&doc_id=' + input.dae_document);
     },
     countup() {
-      this.count++
+      this.count = this.count + 1;
       console.log(this.count)
     },
     countdown() {
-      this.count--
+      this.count = this.count - 1;
       console.log(this.count)
     },
     getQueue() {
@@ -506,7 +506,7 @@ var checklist_mod = {
       input['updated'] = false;
       input['process'] = false;
       input['wo'] = 'WO' + input['ock_code'];
-      
+
       input['lastupdate'] = Date.now();
       if (input['ack_completed'] == undefined) { input['ack_completed'] = '' }
       if (input['ack_finding'] == undefined) { input['ack_finding'] = '' }
@@ -737,7 +737,7 @@ var checklist_mod = {
       item['updated'] = raw['updated'] = true;
       item['process'] = raw['process'] = false;
       item['lastupdate'] = raw['lastupdate'] = Date.now();
-      
+
       setTimeout(function (item) { form.processItems(item) }, 3000, item)
     },
     resetItems(item, event) {
