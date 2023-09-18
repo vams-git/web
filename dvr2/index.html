@@ -132,18 +132,18 @@
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
-                <li v-show="(counter + 1 )*size <== data.length" :class="(counter + 1 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 1)">
+                <li v-show="(counter + 1 )*size <= data.length" :class="(counter + 1 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 1)">
                   <a class="page-link" href="#">{{counter + 1}}</a></li>
-                <li v-show="(counter + 2 )*size <== data.length"
+                <li v-show="(counter + 2 )*size <= data.length"
                   :class="(counter + 2 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 2)"><a
                     class="page-link" href="#">{{counter + 2}}</a></li>
-                <li v-show="(counter + 3 )*size <== data.length" :class="(counter + 3 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 3)">
+                <li v-show="(counter + 3 )*size <= data.length" :class="(counter + 3 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 3)">
                   <a class="page-link" href="#">{{counter + 3}}</a></li>
-                <li v-show="(counter + 4 )*size <== data.length" :class="(counter + 4 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 4)">
+                <li v-show="(counter + 4 )*size <= data.length" :class="(counter + 4 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 4)">
                   <a class="page-link" href="#">{{counter + 4}}</a></li>
-                <li v-show="(counter + 5 )*size <== data.length" :class="(counter + 5 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 5)">
+                <li v-show="(counter + 5 )*size <= data.length" :class="(counter + 5 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 5)">
                   <a class="page-link" href="#">{{counter + 5}}</a></li>
-                <li :class="(counter + 6 )*size > data.length-1 ?'d-none':'page-item'" @click="addCount">
+                <li :class="(counter + 6 )*size >= data.length-1 ?'d-none':'page-item'" @click="addCount">
                   <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
