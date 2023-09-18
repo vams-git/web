@@ -407,13 +407,11 @@ var past_dvr_mod = {
       this.queue.push(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
         '&doc_id=' + input.dae_document);
     },
-    countup() {
-      this.count = this.count + 1;
-      console.log(this.count)
+    countUp() {
+      this.count = this.count + 1
     },
-    countdown() {
-      this.count = this.count - 1;
-      console.log(this.count)
+    countDown() {
+      this.count = this.count - 1
     },
     getQueue() {
       var past_dvr = this;
