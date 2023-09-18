@@ -395,6 +395,7 @@ var past_dvr_mod = {
       data: [],
       loaded: false,
       counter: 0,
+      current: 1,
       queue: [],
     }
   },
@@ -412,6 +413,14 @@ var past_dvr_mod = {
     },
     delCount() {
       this.counter = this.counter - 1
+    },
+    setCurrent(val) {
+      this.current = val
+    },
+    getCurrent() {
+      return test.filter(function (e, i) {
+        if (Math.floor(i / 5) === current - 1) { return e }
+      })
     },
     getQueue() {
       var past_dvr = this;

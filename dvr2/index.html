@@ -91,7 +91,7 @@
                   <h5 class="mt-3 mb-2">Past DVRs</h5>
                 </div>
               </div>
-              <div class="list-group-item list-group-item-action" v-for="dt in data" :key="dt['dae_document']"
+              <div class="list-group-item list-group-item-action" v-for="dt in getCurrent()" :key="dt['dae_document']"
                 :id="'FORMS_'+dt['dae_document']">
                 <div class="hstack gap-2 mb-1">
                   <div class="hstack gap-1">
@@ -127,15 +127,15 @@
           <div class="modal-body ">
             <nav aria-label="Page navigation example">
               <ul class="pagination">
-                <li :class="counter == 0 ?'page-item disabled':'page-item'">
+                <li :class="counter == 0 ?'page-item disabled':'page-item'" @click="delCount">
                   <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li :class="counter == data.length ?'d-none':'page-item'">
+                <li :class="(counter + 1 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 1)"><a class="page-link" href="#">{{counter + 1}}</a></li>
+                <li :class="(counter + 2 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 2)"><a class="page-link" href="#">{{counter + 2}}</a></li>
+                <li :class="(counter + 3 ) == current ?'page-item active':'page-item'" @click="setCurrent(counter + 3)"><a class="page-link" href="#">{{counter + 3}}</a></li>
+                <li :class="counter == data.length-1 ?'d-none':'page-item'" @click="addCount">
                   <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
