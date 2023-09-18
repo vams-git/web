@@ -395,7 +395,7 @@ var past_dvr_mod = {
       data: [],
       loaded: false,
       counter: 0,
-      current: 0,
+      current: 1,
       maxCount: 1,
       size: 10,
       queue: [],
