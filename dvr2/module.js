@@ -77,7 +77,7 @@ var open_jobs_mod = {
     },
     addCount() {
       if (this.counter < this.maxCount) { this.counter = this.counter + 1 }
-      if (this.counter + 1 > current) { current + 1 }
+      if (this.counter + 1 > this.current) { this.current + 1 }
     },
     delCount() {
       if (this.counter > 0) { this.counter = this.counter - 1 }
@@ -437,7 +437,7 @@ var past_dvr_mod = {
     },
     addCount() {
       if (this.counter < this.maxCount) { this.counter = this.counter + 1 }
-      if (this.counter + 1 > current) { current + 1 }
+      if (this.counter + 1 > this.current) { this.current + 1 }
     },
     delCount() {
       if (this.counter > 0) { this.counter = this.counter - 1 }
