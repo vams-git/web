@@ -402,20 +402,20 @@ var past_dvr_mod = {
       var count = this.data.length;
       document.getElementById('pastdvrmodalcount').innerHTML = count;
       var doc_id = input.dae_document;
-      var doc_req = new Request(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
-        '&doc_id=' + input.dae_document, {
+      this.queue.push(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
+      '&doc_id=' + input.dae_document);
+    },
+    getQueue() {
+      var past_dvr = this;
+      var first = past_dvr.queue.shift();
+      var doc_req = new Request(first, {
         redirect: "follow",
         method: 'POST',
         headers: {
           "Content-Type": "text/plain;charset=utf-8",
         },
       });
-      this.queue.push(doc_req);
-    },
-    getQueue() {
-      var past_dvr = this;
-      var first = past_dvr.queue.shift();
-      fetch(first)
+      fetch(doc_req)
         .then(function (response) {
           return response.json();
         })
