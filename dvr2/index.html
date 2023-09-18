@@ -46,7 +46,7 @@
           <div class="modal-body ">
             <nav aria-label="Page navigation example">
               <ul class="pagination">
-                <li :class="counter <= 0 ?'page-item disabled':'page-item'" @click="delCount">
+                <li :class="counter <= 0 ?'d-none':'page-item'" @click="delCount">
                   <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
@@ -154,7 +154,7 @@
           <div class="modal-body ">
             <nav aria-label="Page navigation example">
               <ul class="pagination">
-                <li :class="counter <= 0 ?'page-item disabled':'page-item'" @click="delCount">
+                <li :class="counter <= 0 ?'d-none':'page-item'" @click="delCount">
                   <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
