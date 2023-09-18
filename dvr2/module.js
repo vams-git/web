@@ -936,6 +936,7 @@ var checklist_mod = {
       return collection.filter(function (e) { return e.res && min_req.indexOf(e.ack_code) !== -1 }).length === min_req.length
     },
     processItems(item) {
+      console.log((item['process'] == false && (Date.now() - item['lastupdate']) >= 3000))
       if (item['process'] == false && (Date.now() - item['lastupdate']) >= 3000) {
         console.log('sending ' + item['ack_code'])
         var one = '';
