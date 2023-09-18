@@ -81,6 +81,7 @@ var open_jobs_mod = {
     },
     delCount() {
       if (this.counter > 0) { this.counter = this.counter - 1 }
+      if (this.counter < this.current - 5) { this.setCurrent(this.current - 1) }
     },
     setCurrent(val) {
       this.current = val
@@ -441,6 +442,7 @@ var past_dvr_mod = {
     },
     delCount() {
       if (this.counter > 0) { this.counter = this.counter - 1 }
+      if (this.counter < this.current - 5) { this.setCurrent(this.current - 1) }
     },
     setCurrent(val) {
       this.current = val
