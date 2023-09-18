@@ -61,6 +61,10 @@ var open_jobs_mod = {
     return {
       data: [],
       loaded: false,
+      counter: 0,
+      current: 1,
+      maxCount: 1,
+      size: 10,
     }
   },
   methods: {
@@ -68,6 +72,24 @@ var open_jobs_mod = {
       this.data.push(input);
       var count = this.data.length;
       document.getElementById('openjobmodalcount').innerHTML = count;
+      this.maxCount = Math.floor(count / this.size);
+      if (count % this.size > 0) { this.maxCount = this.maxCount + 1 }
+    },
+    addCount() {
+      if (this.counter < this.data.length) { this.counter = this.counter + 1 }
+    },
+    delCount() {
+      if (this.counter > 0) { this.counter = this.counter - 1 }
+    },
+    setCurrent(val) {
+      this.current = val
+    },
+    getCurrent() {
+      var current = this.current;
+      var size = this.size;
+      return this.data.filter(function (e, i) {
+        if (Math.floor(i / size) === current - 1) { return e }
+      })
     },
     closeModal() { this.loaded = false },
     get_days(item) {
