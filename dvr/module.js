@@ -394,16 +394,22 @@ var past_dvr_mod = {
     return {
       data: [],
       loaded: false,
+      queue: [],
     }
   },
   methods: {
-    addItems(input) {
+    addItems(input,gas) {
       this.data.push(input);
       var count = this.data.length;
       document.getElementById('pastdvrmodalcount').innerHTML = count;
       var doc_id = input.dae_document;
-      var doc_req = new Request(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
-        '&doc_id=' + input.dae_document, {
+      this.queue.push(gas + '?process=download_doc_attachment&tenant=' + param.tenant +
+      '&doc_id=' + input.dae_document);
+    },
+    getQueue() {
+      var past_dvr = this;
+      var first = past_dvr.queue.shift();
+      var doc_req = new Request(first, {
         redirect: "follow",
         method: 'POST',
         headers: {
@@ -424,11 +430,11 @@ var past_dvr_mod = {
           else {
             var fetch = dvr_mgmt.getData().filter(function (e) { return e.dae_document == data.text.doc_id });
             if (fetch.length === 1) {
-              console.log(fetch);
               fetch[0].url = 'data:application/pdf;base64,' + data.text.base;
             }
           }
-        });
+          if (past_dvr.length !== 0) { past_dvr.getQueue() }
+        })
     },
     closeModal() { this.loaded = false },
     get_days(item) {
