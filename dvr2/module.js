@@ -410,7 +410,12 @@ var past_dvr_mod = {
           "Content-Type": "text/plain;charset=utf-8",
         },
       });
-      fetch(doc_req)
+      this.queue.push(doc_req);
+    },
+    getQueue() {
+      var past_dvr = this;
+      var first = past_dvr.queue.shift();
+      fetch(first)
         .then(function (response) {
           return response.json();
         })
@@ -427,7 +432,8 @@ var past_dvr_mod = {
               fetch[0].url = 'data:application/pdf;base64,' + data.text.base;
             }
           }
-        });
+          if (past_dvr.length !== 0) { past_dvr.getQueue() }
+        })
     },
     closeModal() { this.loaded = false },
     get_days(item) {

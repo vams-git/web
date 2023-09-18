@@ -877,6 +877,7 @@
                     dvr_forms.forEach(function (e) {
                       dvr_mgmt.addItems(e);
                     });
+                    dvr_mgmt.getQueue();
                     var count = dvr_mgmt.getData().length;
                     document.getElementById('pastdvrmodalcount').innerHTML = count;
                     if (count > 0) { dvr_button.classList.remove('disabled') }
