@@ -666,6 +666,48 @@
         checklist.broken = true;
       }
       else {
+        var findings_req = new Request(gas + '?process=get_findings&tenant=' + param.tenant + '&userid=' + param.userid, {
+          redirect: "follow",
+          method: 'POST',
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+        });
+        fetch(findings_req)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (data.status != undefined && data.status === false) {
+              alert.add({
+                text: data.text,
+                type: 'error'
+              })
+            }
+            else { findings = data.text }
+          });
+        var user_details_req = new Request(gas + '?process=get_user_details&tenant=' + param.tenant + '&userid=' + param.userid, {
+          redirect: "follow",
+          method: 'POST',
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+        });
+        fetch(user_details_req)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (data.status != undefined && data.status === false) {
+              alert.add({
+                text: data.text,
+                type: 'error'
+              })
+            }
+            else {
+              user_details = data.text.pop();
+            }
+          });
         fetch(updateUrl(gas, param))
           .then(function (response) {
             return response.json();
@@ -733,50 +775,7 @@
               checklist.loaded = true;
             }
           });
-        var findings_req = new Request(gas + '?process=get_findings&tenant=' + param.tenant + '&userid=' + param.userid, {
-          redirect: "follow",
-          method: 'POST',
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-        });
-        fetch(findings_req)
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (data) {
-            if (data.status != undefined && data.status === false) {
-              alert.add({
-                text: data.text,
-                type: 'error'
-              })
-            }
-            else {
-              findings = data.text;
-            }
-          });
-        var user_details_req = new Request(gas + '?process=get_user_details&tenant=' + param.tenant + '&userid=' + param.userid, {
-          redirect: "follow",
-          method: 'POST',
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-        });
-        fetch(user_details_req)
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (data) {
-            if (data.status != undefined && data.status === false) {
-              alert.add({
-                text: data.text,
-                type: 'error'
-              })
-            }
-            else {
-              user_details = data.text.pop();
-            }
-          });
+
         var equipment_details_req = new Request(gas + '?process=get_equipment_details&tenant=' + param.tenant +
           '&userid=' + param.userid + '&organization=' + param.organization + '&equipmentno=' + param.equipmentno, {
           redirect: "follow",
@@ -875,7 +874,7 @@
                   else {
                     dvr_forms = data.text;
                     dvr_forms.forEach(function (e) {
-                      dvr_mgmt.addItems(e,gas);
+                      dvr_mgmt.addItems(e, gas);
                     });
                     dvr_mgmt.getQueue();
                     var count = dvr_mgmt.getData().length;
