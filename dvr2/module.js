@@ -562,6 +562,10 @@ var checklist_mod = {
   watch: {
     data: {
       handler: function (newVal, oldVal) {
+        watching ={
+          'new':newVal,
+          'old':oldVal
+        } ;
         if (Object.keys(oldVal).length !== 0) {
           var oldData = [];
           oldVal.activities.forEach(function (e) {
