@@ -717,6 +717,8 @@
     };
 
     function reload_Data() {
+      photo_mgmt.init();
+      form.init();
       checklist.init();
       payload=[];
       fetch(updateUrl(gas, param))

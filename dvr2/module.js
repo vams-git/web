@@ -37,11 +37,11 @@ var form_mod = {
   },
   methods: {
     init() {
-      this.data= [];
-      this.broken= false;
-      this.loaded= false;
-      this.form= false;
-      this.new_form= true;
+      this.data = [];
+      this.broken = false;
+      this.loaded = false;
+      this.form = false;
+      this.new_form = true;
     },
     addItems(input) {
       this.data.push(input);
@@ -132,6 +132,18 @@ var photo_mod = {
     }
   },
   methods: {
+    init() {
+      this['data'] = {
+        'checklistcode': '',
+        'checklistid': '',
+        'org': '',
+        'photoid': '',
+        'src': '',
+        'loaded': false
+      };
+      this['list'] = false;
+      this['loaded'] = false;
+    },
     updateList(url_prm, ock_code, c) {
       var app_data = this;
       var p = {
@@ -548,6 +560,12 @@ var checklist_mod = {
     }
   },
   methods: {
+    init() {
+      this.data = {};
+      this.raw = [];
+      this.broken = false;
+      this.loaded = false;
+    },
     addItems(input) {
       input['updated'] = false;
       input['process'] = false;
