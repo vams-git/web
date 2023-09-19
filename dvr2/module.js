@@ -590,6 +590,7 @@ var checklist_mod = {
           console.log(oldData.filter(function (e) { return e['ack_code'] === changes[0]['ack_code'] }));
         }
       },
+      immediate: true,
       deep: true
     },
 
