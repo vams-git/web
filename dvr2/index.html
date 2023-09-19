@@ -717,7 +717,7 @@
     };
 
     function reload_Data() {
-      checklist.initialise();
+      checklist.reload();
       payload=[];
       fetch(updateUrl(gas, param))
         .then(function (response) {
