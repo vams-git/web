@@ -837,34 +837,14 @@ var checklist_mod = {
       return items.filter(function (item) { return item }).length
     },
     getAllCompleted() {
-      var collection = [];
-      this.data.activities.forEach(
-        function (e) {
-          e.groups.forEach(
-            function (f) {
-              f.items.forEach(
-                function (g) {
-                  var data = !((g.ack_completed == '' || g.ack_completed == '-')
-                    && g.ack_checklistdatetime == ''
-                    && g.ack_checklistdate == ''
-                    && g.ack_freetext == ''
-                    && g.ack_finding == ''
-                    && g.ack_value == ''
-                    && g.ack_ok == ''
-                    && g.ack_adjusted == ''
-                    && g.ack_yes == ''
-                    && g.ack_no == ''
-                    && g.ack_not_applicable == '');
-                  if (g.ack_requiredtoclose === 'NO') { data = true }
-                  if ((g.updated === true && g.process === true) || (g.updated === false && g.process === false)) { var updated = true } else { var updated = false }
-                  collection.push({ res: data && updated, ack_code: g.ack_code })
-                }
-              )
-            }
-          )
-        }
-      );
-      var min_req = this.raw.filter(
+      var currentApp = this;
+      var activities = currentApp.raw;
+      var collection = activities.map(function (g) { 
+        var data = currentApp.getItemCompleted(g);
+        if (g.ack_requiredtoclose === 'NO') { data = true }
+        if ((g.updated === true && g.process === true) || (g.updated === false && g.process === false)) { var updated = true } else { var updated = false }
+        return  { res: data && updated, ack_code: g.ack_code } });
+      var min_req = currentApp.raw.filter(
         function (j) { return j.ack_requiredtoclose === 'YES' || (j.ack_requiredtoclose === 'NO' && j.updated === true) }
       ).map(function (j) { return j.ack_code });
       return collection.filter(function (e) { return e.res && min_req.indexOf(e.ack_code) !== -1 }).length === min_req.length
