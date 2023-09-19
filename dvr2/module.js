@@ -36,6 +36,13 @@ var form_mod = {
     }
   },
   methods: {
+    init() {
+      this.data= [];
+      this.broken= false;
+      this.loaded= false;
+      this.form= false;
+      this.new_form= true;
+    },
     addItems(input) {
       this.data.push(input);
       if (this.data.filter(function (e) {
