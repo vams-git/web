@@ -562,7 +562,7 @@ var checklist_mod = {
   watch: {
     data: {
       handler: function (newVal, oldVal) {
-        console.log(oldVal);
+        console.log(oldVal === {});
         var oldData = [];
         oldVal.activities.forEach(function (e) {
           e.groups.forEach(function (f) {
