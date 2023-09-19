@@ -580,7 +580,12 @@ var checklist_mod = {
       if (input['ack_reference'] == 'PRE') { input['activity'] = 'Pre Start' }
       if (input['ack_reference'] == 'FAULTS') { input['activity'] = 'Faults' }
       if (input['ack_reference'] == 'POST') { input['activity'] = 'Post Trip' }
-      this.raw.push(input)
+      input['activity_id'] = input['wo'] + '-' + input['ack_reference'];
+      input['activity_act_note'] = input['tsk_desc'] + ' (' + input['activity'] + ')';
+      input['group_id'] = input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label'];
+      input['group_code'] = input['ack_group_label'];
+      input['group_label'] = input['ack_group_label_desc'];
+      this.raw.push(input);
       if (Object.keys(this.data).length == 0) {
         var header = {
           id: input['wo'],
@@ -588,115 +593,61 @@ var checklist_mod = {
           wo: input['ock_code'],
           desc: input['obj_desc'],
           reference: input['ack_reference'],
-          status: ['U'].indexOf(input['ock_status']) == -1,
-          activities: [{
-            id: input['wo'] + '-' + input['ack_reference'],
-            act_note: input['tsk_desc'] + ' (' + input['activity'] + ')',
-            parentid: input['wo'],
-            groups: [{
-              id: input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label'],
-              group_code: input['ack_group_label'],
-              group_label: input['ack_group_label_desc'],
-              parentid: input['wo'] + '-' + input['ack_reference'],
-              items: [{
-                updated: input['updated'],
-                process: input['process'],
-                lastupdate: input['lastupdate'],
-                ack_code: input['ack_code'],
-                ack_desc: input['ack_desc'],
-                ack_taskchecklistcode_comments: input['ack_taskchecklistcode_comments'],
-                ack_requiredtoclose: input['ack_requiredtoclose'],
-                ack_type: input['ack_type'],
-                ack_notes: input['ack_notes'],
-                ack_completed: input['ack_completed'],
-                ack_finding: input['ack_finding'],
-                ack_possiblefindings: input['ack_possiblefindings'],
-                ack_ok: input['ack_ok'],
-                ack_adjusted: input['ack_adjusted'],
-                ack_yes: input['ack_yes'],
-                ack_no: input['ack_no'],
-                ack_value: input['ack_value'],
-                ack_uom: input['ack_uom'],
-                ack_not_applicable: input['ack_not_applicable'],
-                ack_possible_na_options: input['ack_possible_na_options'],
-                ack_freetext: input['ack_freetext'],
-                ack_checklistdate: input['ack_checklistdate'],
-                ack_checklistdatetime: input['ack_checklistdatetime'],
-                ack_sequence: input['ack_sequence'],
-                ack_reference: input['ack_reference'],
-                ack_group_label_desc: input['ack_group_label_desc'],
-                ack_group_label: input['ack_group_label'],
-                parentid: input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label'],
-              }],
-            }],
-          }],
+          status: ['U'].indexOf(input['ock_status']) == -1
         };
         this.data = header;
-      }
-      else {
-        if (this.data.activities.filter(function (e) {
-          return e.id == input['wo'] + '-' + input['ack_reference']
-        }).length == 0) {
-          this.data.activities.push({
-            id: input['wo'] + '-' + input['ack_reference'],
-            act_note: input['tsk_desc'] + ' (' + input['activity'] + ')',
-            parentid: input['wo'],
-            groups: []
-          });
-        }
-        var activity = this.data.activities.findIndex(function (e) {
-          return e.id == input['wo'] + '-' + input['ack_reference']
-        });
-        if (this.data.activities[activity].groups.filter(function (e) {
-          return e.id == input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label']
-        }).length == 0) {
-          this.data.activities[activity].groups.push({
-            id: input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label'],
-            group_code: input['ack_group_label'],
-            group_label: input['ack_group_label_desc'],
-            parentid: input['wo'] + '-' + input['ack_reference'],
-            items: []
-          });
-        }
-        var group = this.data.activities[activity].groups.findIndex(function (e) {
-          return e.id == input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label']
-        });
-        this.data.activities[activity].groups[group].items.push({
-          updated: input['updated'],
-          process: input['process'],
-          lastupdate: input['lastupdate'],
-          ack_code: input['ack_code'],
-          ack_desc: input['ack_desc'],
-          ack_taskchecklistcode_comments: input['ack_taskchecklistcode_comments'],
-          ack_requiredtoclose: input['ack_requiredtoclose'],
-          ack_type: input['ack_type'],
-          ack_notes: input['ack_notes'],
-          ack_completed: input['ack_completed'],
-          ack_finding: input['ack_finding'],
-          ack_possiblefindings: input['ack_possiblefindings'],
-          ack_ok: input['ack_ok'],
-          ack_adjusted: input['ack_adjusted'],
-          ack_yes: input['ack_yes'],
-          ack_no: input['ack_no'],
-          ack_value: input['ack_value'],
-          ack_uom: input['ack_uom'],
-          ack_not_applicable: input['ack_not_applicable'],
-          ack_possible_na_options: input['ack_possible_na_options'],
-          ack_freetext: input['ack_freetext'],
-          ack_checklistdate: input['ack_checklistdate'],
-          ack_checklistdatetime: input['ack_checklistdatetime'],
-          ack_sequence: input['ack_sequence'],
-          ack_reference: input['ack_reference'],
-          ack_group_label_desc: input['ack_group_label_desc'],
-          ack_group_label: input['ack_group_label'],
-          parentid: input['wo'] + '-' + input['ack_reference'] + '-' + input['ack_group_label'],
-        });
       }
     },
     getOptionHTML(option) {
       if (option === 'Z028') { return '<i class="bi bi-check-lg"></i>' }
       if (option === 'Z029') { return '<i class="bi bi-x-lg"></i>' }
       if (option === 'Z030') { return '<i class="bi bi-slash-lg"></i>' }
+    },
+    getActivity(parent) {
+      var list = this.data.raw;
+      var activities = list.map(
+        function (e) {
+          return {
+            id: e['wo'] + '-' + e['ack_reference'],
+            act_note: e['tsk_desc'] + ' (' + e['activity'] + ')',
+            parentid: e['wo'],
+            groups:getGroup(id)
+          }
+        }
+      ).filter(
+        function (e, i, a) {
+          return a.map(function (f) { return f.id }).indexOf(e.id) == i;
+        });
+
+      return activities.filter(function (e) { return e.parentid == parent })
+    },
+    getGroup(parent) {
+      var list = this.data.raw;
+      var groups = list.map(
+        function (e) {
+          return {
+            id: e['wo'] + '-' + e['ack_reference'] + '-' + e['ack_group_label'],
+            group_code: e['ack_group_label'],
+            group_label: e['ack_group_label_desc'],
+            parentid: e['wo'] + '-' + e['ack_reference'],
+            items:getItem(id)
+          }
+        }
+      ).filter(
+        function (e, i, a) {
+          return a.map(function (f) { return f.id }).indexOf(e.id) == i;
+        })
+      return groups.filter(function (e) { return e.parentid == parent })
+    },
+    getItem(parent) {
+      var list = this.data.raw;
+      var items = list.map(
+        function (e) {
+          e['parentid'] = e['wo'] + '-' + e['ack_reference'] + '-' + e['ack_group_label'];
+          return e
+        }
+      );
+      return items.filter(function (e) { return e.parentid == parent })
     },
     expandTextArea(event) {
       var target = event.target;

@@ -289,7 +289,7 @@
       </div>
       <div class="card" v-else>
         <div class="accordion accordion-flush" :id="data.id">
-          <div class="accordion-item" v-for="( activity, index ) in data.activities" :key="activity.id">
+          <div class="accordion-item" v-for="( activity, index ) in getActivity(data.id)" :key="activity.id">
             <div class="accordion-header" :id="'h'+activity.id">
               <button :class="'accordion-button bg-light py-3 '+[ index == 0 ? '' : 'collapsed']" type="button"
                 data-bs-toggle="collapse" aria-expanded="false"
