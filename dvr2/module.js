@@ -559,6 +559,15 @@ var checklist_mod = {
       loaded: false
     }
   },
+  watch: {
+    data: {
+      handler: function (newVal) {
+        console.log("new Value is " + newVal)
+      },
+      deep: true
+    },
+
+  },
   methods: {
     init() {
       this.data = {};
@@ -763,7 +772,6 @@ var checklist_mod = {
     },
     openPhoto(item) { photo_mgmt.addChecklist(item.ack_code, this.data.wo, this.data.org) },
     snycItems(item, event) {
-      console.log(item)
       if (event != undefined) {
         if (event.target.nodeName == 'TEXTAREA') {
           event.target.style.height = 'auto'
