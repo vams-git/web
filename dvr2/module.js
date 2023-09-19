@@ -576,8 +576,13 @@ var checklist_mod = {
             })
           });
           var oldCompare = oldData.map(function (f) { return { ack_code: f['ack_code'], data: JSON.stringify(f) } });
-          var changes = newData.filter(function (e, i, a) { return oldCompare.filter(function (f) { return f['ack_code'] === e['ack_code'] }).data !== JSON.stringify(e) });
+          console.log(oldCompare);
+          var newCompare = newData.map(function (f) { return { ack_code: f['ack_code'], data: JSON.stringify(f) } });
+          console.log(newCompare);
+          var changes = newCompare.filter(function (e, i, a) { 
+            if(oldCompare.filter(function (f) { return f['ack_code'] === e['ack_code'] }).data !== e.data) return e });
           console.log(changes);
+          console.log(newData.filter(function (e) { return e['ack_code'] === changes[0]['ack_code'] }));
           console.log(oldData.filter(function (e) { return e['ack_code'] === changes[0]['ack_code'] }));
         }
       },
