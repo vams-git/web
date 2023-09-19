@@ -929,9 +929,10 @@
               alert.add({ text: data.text, type: 'error' })
             }
             else {
-              findings = data.findings.text;
-              user_details = data.user_details.text.pop();
-              equipment_details = data.equipment_details.text.pop();
+
+              findings = data.text.findings.text;
+              user_details = data.text.user_details.text.pop();
+              equipment_details = data.text.equipment_details.text.pop();
               get_forms();
               get_open_jobs();
               get_past_dvr();
