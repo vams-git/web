@@ -308,7 +308,7 @@
                         data-bs-toggle="collapse" aria-expanded="false"
                         v-bind="{ 'data-bs-target': '#c'+group.id, 'aria-controls': 'c'+group.id }" @click="loadMeta()">
                         <span class="w-100">{{ group.group_label}}</span>
-                        <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group) }} of {{
+                        <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group.id) }} of {{
                           group.items.filter(function(j){return j.ack_requiredtoclose === 'YES' ||
                           (j.ack_requiredtoclose === 'NO' && j.updated === true)}).length}} done )</span>
                       </button>

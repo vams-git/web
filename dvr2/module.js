@@ -612,7 +612,7 @@ var checklist_mod = {
             id: e['wo'] + '-' + e['ack_reference'],
             act_note: e['tsk_desc'] + ' (' + e['activity'] + ')',
             parentid: e['wo'],
-            groups:currentApp.getGroup(e['wo'] + '-' + e['ack_reference'])
+            groups: currentApp.getGroup(e['wo'] + '-' + e['ack_reference'])
           }
         }
       ).filter(
@@ -632,7 +632,7 @@ var checklist_mod = {
             group_code: e['ack_group_label'],
             group_label: e['ack_group_label_desc'],
             parentid: e['wo'] + '-' + e['ack_reference'],
-            items:currentApp.getItem(e['wo'] + '-' + e['ack_reference'] + '-' + e['ack_group_label'])
+            items: currentApp.getItem(e['wo'] + '-' + e['ack_reference'] + '-' + e['ack_group_label'])
           }
         }
       ).filter(
@@ -842,19 +842,9 @@ var checklist_mod = {
     closeForm() { location.reload() },
     loadMeta() { var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; loadmetadata(input) },
     getGroupCompleted(group) {
-      return group.items.filter(function (item) {
-        return !((item.ack_completed == '' || item.ack_completed == '-')
-          && item.ack_checklistdatetime == ''
-          && item.ack_checklistdate == ''
-          && item.ack_freetext == ''
-          && item.ack_finding == ''
-          && item.ack_value == ''
-          && item.ack_ok == ''
-          && item.ack_adjusted == ''
-          && item.ack_yes == ''
-          && item.ack_no == ''
-          && item.ack_not_applicable == '')
-      }).length
+      var currentApp = this;
+      var items = currentApp.getItem(group).map(function (e) { return currentApp.getItemCompleted(item) });
+      return items.filter(function (item) { return item }).length
     },
     getAllCompleted() {
       var collection = [];
