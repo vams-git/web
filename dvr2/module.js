@@ -604,14 +604,15 @@ var checklist_mod = {
       if (option === 'Z030') { return '<i class="bi bi-slash-lg"></i>' }
     },
     getActivity(parent) {
-      var list = this.raw;
+      var currentApp = this;
+      var list = currentApp.raw;
       var activities = list.map(
         function (e) {
           return {
             id: e['wo'] + '-' + e['ack_reference'],
             act_note: e['tsk_desc'] + ' (' + e['activity'] + ')',
             parentid: e['wo'],
-            groups:getGroup(id)
+            groups:currentApp.getGroup(id)
           }
         }
       ).filter(
@@ -622,7 +623,8 @@ var checklist_mod = {
       return activities.filter(function (e) { return e.parentid == parent })
     },
     getGroup(parent) {
-      var list = this.raw;
+      var currentApp = this;
+      var list = currentApp.raw;
       var groups = list.map(
         function (e) {
           return {
@@ -630,7 +632,7 @@ var checklist_mod = {
             group_code: e['ack_group_label'],
             group_label: e['ack_group_label_desc'],
             parentid: e['wo'] + '-' + e['ack_reference'],
-            items:getItem(id)
+            items:currentApp.getItem(id)
           }
         }
       ).filter(
@@ -640,7 +642,8 @@ var checklist_mod = {
       return groups.filter(function (e) { return e.parentid == parent })
     },
     getItem(parent) {
-      var list = this.raw;
+      var currentApp = this;
+      var list = currentApp.raw;
       var items = list.map(
         function (e) {
           e['parentid'] = e['wo'] + '-' + e['ack_reference'] + '-' + e['ack_group_label'];
