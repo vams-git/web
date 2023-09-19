@@ -562,24 +562,24 @@ var checklist_mod = {
   watch: {
     data: {
       handler: function (newVal, oldVal) {
-        console.log(oldVal === {});
-        var oldData = [];
-        oldVal.activities.forEach(function (e) {
-          e.groups.forEach(function (f) {
-            f.items.forEach(function (g) { oldData.push(g) })
-          })
-        });
-        console.log(newVal);
-        var newData = [];
-        newVal.activities.forEach(function (e) {
-          e.groups.forEach(function (f) {
-            f.items.forEach(function (g) { newData.push(g) })
-          })
-        });
-        var oldCompare = oldData.map(function(f){return {ack_code: f['ack_code'], data: JSON.stringify(f)}});
-        var changes = newData.filter(function(e,i,a){ return oldCompare.filter(function(f){return f['ack_code']=== e['ack_code']}).data !== JSON.stringify(e) });
-        console.log(changes);
-        console.log(oldData.filter(function(e){return e['ack_code'] === changes[0]['ack_code']}));
+        if (Object.keys(oldVal).length !== 0) {
+          var oldData = [];
+          oldVal.activities.forEach(function (e) {
+            e.groups.forEach(function (f) {
+              f.items.forEach(function (g) { oldData.push(g) })
+            })
+          });
+          var newData = [];
+          newVal.activities.forEach(function (e) {
+            e.groups.forEach(function (f) {
+              f.items.forEach(function (g) { newData.push(g) })
+            })
+          });
+          var oldCompare = oldData.map(function (f) { return { ack_code: f['ack_code'], data: JSON.stringify(f) } });
+          var changes = newData.filter(function (e, i, a) { return oldCompare.filter(function (f) { return f['ack_code'] === e['ack_code'] }).data !== JSON.stringify(e) });
+          console.log(changes);
+          console.log(oldData.filter(function (e) { return e['ack_code'] === changes[0]['ack_code'] }));
+        }
       },
       deep: true
     },
