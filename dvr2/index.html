@@ -596,11 +596,11 @@
               type: 'error'
             })
           }
-          else { location.reload() }
+          else { reload_Data() }
         })
     }
 
-    function closeForm() { location.reload() }
+    function closeForm() { reload_Data() }
 
     function send_form(input) {
       checklist.loaded = false;
@@ -620,7 +620,7 @@
             });
       var check = function () {
         if (form.getAllCompleted()) {
-          if (input.reference == 'PRE') { reload_Data()}
+          if (input.reference == 'PRE') { reload_Data() }
           else {
             if (!start) {
               start = true;
@@ -720,7 +720,7 @@
       photo_mgmt.init();
       form.init();
       checklist.init();
-      payload=[];
+      payload = [];
       fetch(updateUrl(gas, param))
         .then(function (response) {
           return response.json();
