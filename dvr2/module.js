@@ -612,7 +612,7 @@ var checklist_mod = {
             id: e['wo'] + '-' + e['ack_reference'],
             act_note: e['tsk_desc'] + ' (' + e['activity'] + ')',
             parentid: e['wo'],
-            groups:currentApp.getGroup(id)
+            groups:currentApp.getGroup(e['wo'] + '-' + e['ack_reference'])
           }
         }
       ).filter(
@@ -632,7 +632,7 @@ var checklist_mod = {
             group_code: e['ack_group_label'],
             group_label: e['ack_group_label_desc'],
             parentid: e['wo'] + '-' + e['ack_reference'],
-            items:currentApp.getItem(id)
+            items:currentApp.getItem(e['wo'] + '-' + e['ack_reference'] + '-' + e['ack_group_label'])
           }
         }
       ).filter(
