@@ -479,8 +479,8 @@
         <div class="card-footer hstack gap-2 bg-light text-center p-3">
           <button v-show="!data.status" type="button" @click="submitForm()" :disabled="!getAllCompleted()"
             class="btn mx-auto w-50 btn-primary">
-            <span v-if="!getAllCompleted() && snyc.length === 0">...</span>
-            <span v-if="!getAllCompleted() && snyc.length !== 0">syncing...</span>
+            <span v-if="!getAllCompleted() && data.snyc.length === 0">...</span>
+            <span v-if="!getAllCompleted() && data.snyc.length !== 0">syncing...</span>
             <span v-else>Submit</span>
           </button>
           <button v-show="!data.status" type="button" @click="cancelForm()"
