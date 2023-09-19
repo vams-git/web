@@ -289,7 +289,7 @@
       </div>
       <div class="card" v-else>
         <div class="accordion accordion-flush" :id="data.id">
-          <div class="accordion-item" v-for="( activity, index ) in getActivity(data.id)" :key="activity.id">
+          <div class="accordion-item" v-for="( activity, index ) in data.activities" :key="activity.id">
             <div class="accordion-header" :id="'h'+activity.id">
               <button :class="'accordion-button bg-light py-3 '+[ index == 0 ? '' : 'collapsed']" type="button"
                 data-bs-toggle="collapse" aria-expanded="false"
@@ -308,7 +308,7 @@
                         data-bs-toggle="collapse" aria-expanded="false"
                         v-bind="{ 'data-bs-target': '#c'+group.id, 'aria-controls': 'c'+group.id }" @click="loadMeta()">
                         <span class="w-100">{{ group.group_label}}</span>
-                        <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group.id) }} of {{
+                        <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group) }} of {{
                           group.items.filter(function(j){return j.ack_requiredtoclose === 'YES' ||
                           (j.ack_requiredtoclose === 'NO' && j.updated === true)}).length}} done )</span>
                       </button>
@@ -523,7 +523,7 @@
 
     var param;
     var start = false;
-    var gas = "https://script.google.com/macros/s/AKfycbym1Ko8WFpZJ1xIM9h2KlkDpvK5vavFrSvQYlF-qkK1JPtmjQfLic8OY0z2-19dIUDG/exec";
+    var gas = "https://script.google.com/macros/s/AKfycbzSznniNEh_L5YP4ESIrZVkvY0U6NCy3_0bnpnGBt6_uUWeUfcM3W6X9MrBX3y7hOi82w/exec";
 
     function build_form(input) {
       var new_state = list.filter(function (e) { return e['ock_code'] == input })[0].state;
