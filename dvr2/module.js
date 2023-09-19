@@ -797,7 +797,7 @@ var checklist_mod = {
       }
     },
     openPhoto(item) { photo_mgmt.addChecklist(item.ack_code, this.data.wo, this.data.org) },
-    snycItems(item, event) {
+    snycItems(item, event) {/*
       if (event != undefined) {
         if (event.target.nodeName == 'TEXTAREA') {
           event.target.style.height = 'auto'
@@ -836,7 +836,7 @@ var checklist_mod = {
       item['process'] = raw['process'] = false;
       item['lastupdate'] = raw['lastupdate'] = Date.now();
 
-      setTimeout(function (item) { form.processItems(item) }, 3000, item)
+      setTimeout(function (item) { form.processItems(item) }, 3000, item)*/
     },
     resetItems(item, event) {
 
