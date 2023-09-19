@@ -620,7 +620,7 @@
             });
       var check = function () {
         if (form.getAllCompleted()) {
-          if (input.reference == 'PRE') { location.reload() }
+          if (input.reference == 'PRE') { reload_Data()}
           else {
             if (!start) {
               start = true;
@@ -679,7 +679,7 @@
               type: 'error'
             })
           }
-          else { location.reload() }
+          else { reload_Data() }
         });
     }
 

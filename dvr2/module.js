@@ -476,7 +476,6 @@ var past_dvr_mod = {
     getQueue() {
       var past_dvr = this;
       var first = past_dvr.queue.shift();
-      console.log(first);
       var doc_req = new Request(first, {
         redirect: "follow",
         method: 'POST',
@@ -501,7 +500,7 @@ var past_dvr_mod = {
               fetch[0].url = 'data:application/pdf;base64,' + data.text.base;
             }
           }
-          if (past_dvr.length !== 0) { past_dvr.getQueue() }
+          if (past_dvr.queue.length !== 0) { past_dvr.getQueue() }
         })
     },
     closeModal() { this.loaded = false },
