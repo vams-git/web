@@ -750,20 +750,23 @@ var checklist_mod = {
       form.snycItems(item, event)
     },
     getItemCompleted(item) {
-      if ((item.ack_completed == '' || item.ack_completed == '-')
-        && item.ack_checklistdatetime == ''
-        && item.ack_checklistdate == ''
-        && item.ack_freetext == ''
-        && item.ack_finding == ''
-        && item.ack_value == ''
-        && item.ack_ok == ''
-        && item.ack_adjusted == ''
-        && item.ack_yes == ''
-        && item.ack_no == ''
-        && item.ack_not_applicable == '') {
-        return false
+      if (item.ack_requiredtoclose === 'NO') { return true }
+      else {
+        if ((item.ack_completed == '' || item.ack_completed == '-')
+          && item.ack_checklistdatetime == ''
+          && item.ack_checklistdate == ''
+          && item.ack_freetext == ''
+          && item.ack_finding == ''
+          && item.ack_value == ''
+          && item.ack_ok == ''
+          && item.ack_adjusted == ''
+          && item.ack_yes == ''
+          && item.ack_no == ''
+          && item.ack_not_applicable == '') {
+          return false
+        }
+        else { return true }
       }
-      else { return true }
     },
     getPhotoId(itemid) {
       var id = this.raw.filter(function (e) {
@@ -839,11 +842,11 @@ var checklist_mod = {
     getAllCompleted() {
       var currentApp = this;
       var activities = currentApp.raw;
-      var collection = activities.map(function (g) { 
+      var collection = activities.map(function (g) {
         var data = currentApp.getItemCompleted(g);
-        if (g.ack_requiredtoclose === 'NO') { data = true }
         if ((g.updated === true && g.process === true) || (g.updated === false && g.process === false)) { var updated = true } else { var updated = false }
-        return  { res: data && updated, ack_code: g.ack_code } });
+        return { res: data && updated, ack_code: g.ack_code }
+      });
       var min_req = currentApp.raw.filter(
         function (j) { return j.ack_requiredtoclose === 'YES' || (j.ack_requiredtoclose === 'NO' && j.updated === true) }
       ).map(function (j) { return j.ack_code });
