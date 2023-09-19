@@ -563,9 +563,9 @@ var checklist_mod = {
     data: {
       handler: function (oldVal,newVal) {
         console.log("old Value is");
-        console.log(JSON.stringify(oldVal));
+        console.log(oldVal);
         console.log("new Value is");
-        console.log(JSON.stringify(newVal));
+        console.log(newVal);
       },
       deep: true
     },
