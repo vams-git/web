@@ -561,11 +561,23 @@ var checklist_mod = {
   },
   watch: {
     data: {
-      handler: function (oldVal,newVal) {
-        console.log("old Value is");
-        console.log(oldVal);
-        console.log("new Value is");
-        console.log(newVal);
+      handler: function (newVal, oldVal) {
+        var oldData = [];
+        oldVal.activities.forEach(function (e) {
+          e.groups.forEach(function (f) {
+            f.items.forEach(function (g) { oldData.push(g) })
+          })
+        });
+        var newData = [];
+        newVal.activities.forEach(function (e) {
+          e.groups.forEach(function (f) {
+            f.items.forEach(function (g) { newData.push(g) })
+          })
+        });
+        var oldCompare = oldData.map(function(f){return {ack_code: f['ack_code'], data: JSON.stringify(f)}});
+        var changes = newData.filter(function(e,i,a){ return oldCompare.filter(function(f){return f['ack_code']=== e['ack_code']}).data !== JSON.stringify(e) });
+        console.log(changes);
+        console.log(oldData.filter(function(e){return e[ack_code] === changes[0]['ack_code']}));
       },
       deep: true
     },
