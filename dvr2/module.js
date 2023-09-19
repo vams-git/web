@@ -833,7 +833,7 @@ var checklist_mod = {
     loadMeta() { var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; loadmetadata(input) },
     getGroupCompleted(group) {
       var currentApp = this;
-      var items = currentApp.getItem(group).map(function (e) { return currentApp.getItemCompleted(encodeURIComponent) });
+      var items = currentApp.getItem(group).map(function (e) { return currentApp.getItemCompleted(e) });
       return items.filter(function (item) { return item }).length
     },
     getAllCompleted() {
