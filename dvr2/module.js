@@ -541,12 +541,6 @@ var checklist_mod = {
     }
   },
   methods: {
-    reload() {
-      this.data = {};
-      this.raw = [];
-      this.broken = false;
-      this.loaded = false;
-    },
     addItems(input) {
       input['updated'] = false;
       input['process'] = false;

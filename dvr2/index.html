@@ -717,7 +717,7 @@
     };
 
     function reload_Data() {
-      checklist.reload();
+      checklist = Vue.createApp(form_mod).mount("#check");
       payload=[];
       fetch(updateUrl(gas, param))
         .then(function (response) {
