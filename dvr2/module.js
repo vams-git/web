@@ -555,6 +555,7 @@ var checklist_mod = {
     return {
       data: {},
       raw: [],
+      sync: [],
       broken: false,
       loaded: false
     }
@@ -563,6 +564,7 @@ var checklist_mod = {
     init() {
       this.data = {};
       this.raw = [];
+      this.sync = [];
       this.broken = false;
       this.loaded = false;
     },
@@ -961,6 +963,7 @@ var checklist_mod = {
     },
     processItems(item) {
       if (item['process'] == false && (Date.now() - item['lastupdate']) >= 3000) {
+        this.sync.push(item['ack_code']);
         console.log('sending ' + item['ack_code'])
         var one = '';
         var two = '';
@@ -1025,6 +1028,7 @@ var checklist_mod = {
               var id = form.raw.findIndex(function (e) { return e['ack_code'] == item['ack_code'] });
               var raw = form.raw[id];
               item['process'] = raw['process'] = true;
+              form.sync.shift();
             }
           });
       }
