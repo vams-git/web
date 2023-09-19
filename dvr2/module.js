@@ -476,6 +476,7 @@ var past_dvr_mod = {
     getQueue() {
       var past_dvr = this;
       var first = past_dvr.queue.shift();
+      console.log(first);
       var doc_req = new Request(first, {
         redirect: "follow",
         method: 'POST',
