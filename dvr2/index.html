@@ -716,6 +716,77 @@
       return check;
     };
 
+    function reload_Data(){
+      
+      fetch(updateUrl(gas, param))
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (data.status != undefined && data.status === false && data.text !== 'query returns null') {
+              alert.add({
+                text: data.text,
+                type: 'error'
+              });
+              form.broken = true;
+              checklist.broken = true;
+            }
+            else {
+              if (data.text === 'query returns null') { data = [] }
+              else { data = data.text }
+              data = data.filter(function (e) { return e['ock_code'] != undefined });
+              data.forEach(function (e) {
+                if (e['ack_value'] != undefined) { e['ack_value'] = e['ack_value'].replaceAll(',', '') }
+              });
+              payload = payload.concat(data);
+              var reform = payload.map(function (e) {
+                var rep = {};
+                rep['obj_org'] = e['obj_org'];
+                rep['obj_code'] = e['obj_code'];
+                rep['obj_desc'] = e['obj_desc'];
+                rep['obj_udfchar39'] = e['obj_udfchar39'];
+                rep['ock_status'] = e['ock_status'];
+                rep['ock_status_desc'] = e['ock_status_desc'];
+                rep['trunc_ock_startdate'] = e['trunc_ock_startdate'];
+                rep['ock_code'] = e['ock_code'];
+                return rep
+              });
+              var new_ref = [...new Map(reform.map(item =>
+                [item['ock_code'], item])).values()];
+
+              if (new_ref.length > 0) {
+                new_ref.forEach(function (e) {
+                  if (e['ock_status'] == 'U') {
+                    var req = payload.filter(function (f) { return f['ack_requiredtoclose'] === 'YES' && f['ock_code'] === e['ock_code'] });
+                    var req_pre = req.filter(function (f) { return f['ack_reference'] === 'PRE' && f['ock_code'] === e['ock_code'] });
+                    var req_post = req.filter(function (f) { return f['ack_reference'] === 'POST' && f['ock_code'] === e['ock_code'] });
+                    var current_pre = req_pre.filter(function (f) {
+                      if (f['ack_type'] == '01' && f['ack_completed'] != undefined && f['ack_completed'] != '-') { return f }
+                      if (f['ack_type'] == '02' && f['ack_yes'] != undefined && f['ack_no'] != undefined) { return f }
+                      if (f['ack_type'] == '03' && f['ack_finding'] != undefined) { return f }
+                      if (f['ack_type'] == '04' && f['ack_value'] != undefined) { return f }
+                      if (f['ack_type'] == '13' && f['ack_checklistdate'] != undefined) { return f }
+                      if (f['ack_type'] == '14' && f['ack_checklistdatetime'] != undefined) { return f }
+                      if (f['ack_type'] == '15' && f['ack_freetext'] != undefined) { return f }
+                    });
+                    if (current_pre.length == req_pre.length) {
+                      e['state'] = 'Post-Trip'
+                    } else { e['state'] = 'Pre-Trip' }
+                  } else {
+                    e['state'] = ''
+
+                  }
+                })
+              }
+              list = list.concat(new_ref);
+              new_ref.forEach(function (e) {
+                checklist.addItems(e);
+              });
+              checklist.loaded = true;
+            }
+          });
+    }
+
     (function () {
       param = getAllUrlParams();
       if (param.equipmentno == undefined || param.equipmentno == '' || param.organization == undefined || param.organization == '' ||
