@@ -559,42 +559,6 @@ var checklist_mod = {
       loaded: false
     }
   },
-  watch: {
-    data: {
-      handler: function (newVal, oldVal) {
-        watching ={
-          'new':newVal,
-          'old':oldVal
-        } ;
-        if (Object.keys(oldVal).length !== 0) {
-          var oldData = [];
-          oldVal.activities.forEach(function (e) {
-            e.groups.forEach(function (f) {
-              f.items.forEach(function (g) { oldData.push(g) })
-            })
-          });
-          var newData = [];
-          newVal.activities.forEach(function (e) {
-            e.groups.forEach(function (f) {
-              f.items.forEach(function (g) { newData.push(g) })
-            })
-          });
-          var oldCompare = oldData.map(function (f) { return { ack_code: f['ack_code'], data: JSON.stringify(f) } });
-          console.log(oldCompare);
-          var newCompare = newData.map(function (f) { return { ack_code: f['ack_code'], data: JSON.stringify(f) } });
-          console.log(newCompare);
-          var changes = newCompare.filter(function (e, i, a) { 
-            if(oldCompare.filter(function (f) { return f['ack_code'] === e['ack_code'] }).data !== e.data) return e });
-          console.log(changes);
-          console.log(newData.filter(function (e) { return e['ack_code'] === changes[0]['ack_code'] }));
-          console.log(oldData.filter(function (e) { return e['ack_code'] === changes[0]['ack_code'] }));
-        }
-      },
-      immediate: true,
-      deep: true
-    },
-
-  },
   methods: {
     init() {
       this.data = {};
@@ -798,7 +762,7 @@ var checklist_mod = {
       }
     },
     openPhoto(item) { photo_mgmt.addChecklist(item.ack_code, this.data.wo, this.data.org) },
-    snycItems(item, event) {/*
+    snycItems(item, event) {
       if (event != undefined) {
         if (event.target.nodeName == 'TEXTAREA') {
           event.target.style.height = 'auto'
@@ -837,7 +801,7 @@ var checklist_mod = {
       item['process'] = raw['process'] = false;
       item['lastupdate'] = raw['lastupdate'] = Date.now();
 
-      setTimeout(function (item) { form.processItems(item) }, 3000, item)*/
+      setTimeout(function (item) { form.processItems(item) }, 3000, item)
     },
     resetItems(item, event) {
 
