@@ -541,7 +541,7 @@ var checklist_mod = {
     }
   },
   methods: {
-    init() {
+    initialise() {
       this.data = {};
       this.raw = [];
       this.broken = false;
