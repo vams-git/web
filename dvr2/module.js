@@ -1003,26 +1003,21 @@ var checklist_mod = {
           'chkdatanotes': item['ack_notes'],
           'userid': param.userid
         }
+        console.log(payload)
 
         var checklist_req = new Request(gas + '?process=upd_checklist', {
           redirect: "follow",
           method: 'POST',
           body: JSON.stringify(payload),
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
         });
 
         fetch(checklist_req)
-          .then(function (response) {
-            return response.json();
-          })
+          .then(function (response) { return response.json() })
           .then(function (data) {
+            console.log(data)
             if (data.status != undefined && data.status === false) {
-              alert.add({
-                text: data.text,
-                type: 'error'
-              })
+              alert.add({ text: data.text, type: 'error' })
             }
             else {
               var id = form.raw.findIndex(function (e) { return e['ack_code'] == item['ack_code'] });
@@ -1034,5 +1029,4 @@ var checklist_mod = {
       }
     }
   }
-
 }
