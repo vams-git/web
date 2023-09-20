@@ -265,8 +265,8 @@
         </div>
       </div>
       <div class="vstack gap-2" v-if="form != true">
-        <button @click="loadForm" type="button" class="btn btn-primary" :disabled="form_ready()" v-if="data.length != 0 "
-          :id="dt['ock_code']" v-for="dt in data" :key="dt['ock_code']">
+        <button @click="loadForm" type="button" class="btn btn-primary" :disabled="form_ready()"
+          v-if="data.length != 0 " :id="dt['ock_code']" v-for="dt in data" :key="dt['ock_code']">
           {{ dt['trunc_ock_startdate'] + ' ' + dt['state'] + ' (' + dt['ock_status_desc'] + ')'}}
         </button>
         <button @click="newForm" type="button" class="btn btn-primary" :disabled="form_ready()" v-if="new_form"
@@ -946,7 +946,9 @@
               usr_data = {};
               usr.forEach(function (e) { usr_data[e[0]] = e[1] });
               user_details = JSON.parse(JSON.stringify(usr_data));
+              checklist.addUser(user_details);
               equipment_details = JSON.parse(JSON.stringify(response));
+              checklist.addEquipment(equipment_details);
               get_open_jobs();
               get_past_dvr();
             }
