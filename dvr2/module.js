@@ -767,6 +767,7 @@ var checklist_mod = {
         }
       }
     },
+    isSync() { return this.sync.length !== 0 },
     openPhoto(item) { photo_mgmt.addChecklist(item.ack_code, this.data.wo, this.data.org) },
     snycItems(item, event) {
       if (event != undefined) {
