@@ -936,7 +936,7 @@
               delete response.fnd_code;
               fnd = fnd.split(";");
               fnd = fnd.map(function (e) { return e.split(",") });
-              fnd = fnd.map(function (e) { return { 'fnd_code': e[0], 'fnd_desc': e[1] } });
+              fnd = fnd.map(function (e) { return { fnd_code: e[0], fnd_desc: e[1] } });
               var usr = response.usr_code;
               delete response.usr_code;
               usr = usr.split(";");
