@@ -31,8 +31,6 @@ var form_mod = {
       data: [],
       broken: false,
       loaded: false,
-      user: '',
-      equipment: '',
       form: false,
       new_form: true
     }
@@ -42,8 +40,6 @@ var form_mod = {
       this.data = [];
       this.broken = false;
       this.loaded = false;
-      this.user = '';
-      this.equipment = '';
       this.form = false;
       this.new_form = true;
     },
@@ -60,11 +56,9 @@ var form_mod = {
       build_form(target.id)
     },
     form_ready() {
-      if (this.user === '' || this.equipment === '') { return false }
-      else { return true }
+      if (user_details === undefined || equipment_details === undefined) { return true }
+      else { return false }
     },
-    addUser(user) { this.user = user },
-    addEquipment(equipment) { this.equipment = equipment },
     newForm(event) { build_new_form() },
     getData() {
       var data = this.data;

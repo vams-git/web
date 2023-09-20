@@ -946,9 +946,7 @@
               usr_data = {};
               usr.forEach(function (e) { usr_data[e[0]] = e[1] });
               user_details = JSON.parse(JSON.stringify(usr_data));
-              checklist.addUser(user_details);
               equipment_details = JSON.parse(JSON.stringify(response));
-              checklist.addEquipment(equipment_details);
               get_open_jobs();
               get_past_dvr();
             }
