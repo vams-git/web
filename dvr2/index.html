@@ -937,15 +937,15 @@
               fnd = fnd.split(";");
               fnd = fnd.map(function (e) { return e.split(",") });
               fnd = fnd.map(function (e) { return { fnd_code: e[0], fnd_desc: e[1] } });
+              findings = JSON.parse(JSON.stringify(fnd));
               var usr = response.usr_code;
               delete response.usr_code;
               usr = usr.split(";");
               usr = usr.map(function (e) { return e.split(",") });
               usr_data = {};
               usr.forEach(function (e) { usr_data[e[0]] = e[1] });
-              findings = fnd;
-              user_details = usr_data;
-              equipment_details = response;
+              user_details = JSON.parse(JSON.stringify(usr_data));
+              equipment_details = JSON.parse(JSON.stringify(response));
               get_forms();
               get_open_jobs();
               get_past_dvr();
