@@ -811,7 +811,10 @@
         .then(function (response) { return response.json() })
         .then(function (data) {
           if (data.status != undefined && data.status === false) { alert.add({ text: data.text, type: 'error' }) }
-          else { user_details = data.text.pop() }
+          else {
+            user_details = data.text.pop();
+            checklist.addUser(user_details);
+          }
         });
     }
 
@@ -827,7 +830,10 @@
         .then(function (response) { return response.json() })
         .then(function (data) {
           if (data.status != undefined && data.status === false) { alert.add({ text: data.text, type: 'error' }) }
-          else { equipment_details = data.text.pop() }
+          else {
+            equipment_details = data.text.pop();
+            checklist.addEquipment(equipment_details);
+          }
         });
     }
 
@@ -947,7 +953,9 @@
               usr_data = {};
               usr.forEach(function (e) { usr_data[e[0]] = e[1] });
               user_details = JSON.parse(JSON.stringify(usr_data));
+              checklist.addUser(user_details);
               equipment_details = JSON.parse(JSON.stringify(response));
+              checklist.addEquipment(equipment_details);
               get_open_jobs();
               get_past_dvr();
             }
