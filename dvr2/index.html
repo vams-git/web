@@ -931,10 +931,21 @@
               alert.add({ text: data.text, type: 'error' })
             }
             else {
-
-              findings = data.text.findings.text;
-              user_details = data.text.user_details.text.pop();
-              equipment_details = data.text.equipment_details.text.pop();
+              var response = data.text.pop();
+              var fnd = response.fnd_code;
+              delete response.fnd_code;
+              fnd = fnd.split(";");
+              fnd = fnd.map(function(e){return e.split(",")});
+              fnd = fnd.map(function(e){return {'fnd_code':e[0],'fnd_desc':e[1]}});
+              var usr = response.usr_code;
+              delete response.usr_code;
+              usr = usr.split(";");
+              usr = usr.map(function(e){return e.split(",")});
+              usr_data = {};
+              usr.forEach(function(e){ usr_data[e[0]] = e[1] });
+              findings = fnd;
+              user_details = usr_data;
+              equipment_details = response;
               get_forms();
               get_open_jobs();
               get_past_dvr();
