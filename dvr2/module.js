@@ -1003,7 +1003,6 @@ var checklist_mod = {
           'chkdatanotes': item['ack_notes'],
           'userid': param.userid
         }
-        console.log(payload)
 
         var checklist_req = new Request(gas + '?process=upd_checklist', {
           redirect: "follow",
