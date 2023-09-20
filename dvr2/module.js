@@ -55,6 +55,12 @@ var form_mod = {
       if (target.tagName != 'button') { target = target.closest('button') }
       build_form(target.id)
     },
+    form_ready() {
+      if (user_details === undefined || equipment_details === undefined) {
+        return false
+      }
+      else { return true }
+    },
     newForm(event) { build_new_form() },
     getData() {
       var data = this.data;
