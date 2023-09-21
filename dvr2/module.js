@@ -832,22 +832,6 @@ var checklist_mod = {
       event.target = parent.querySelector('textarea')
       form.snycItems(item, event)
     },
-    getItemCompleted(item) {
-      if ((item.ack_completed == '' || item.ack_completed == '-')
-        && item.ack_checklistdatetime == ''
-        && item.ack_checklistdate == ''
-        && item.ack_freetext == ''
-        && item.ack_finding == ''
-        && item.ack_value == ''
-        && item.ack_ok == ''
-        && item.ack_adjusted == ''
-        && item.ack_yes == ''
-        && item.ack_no == ''
-        && item.ack_not_applicable == '') {
-        return false
-      }
-      else { return true }
-    },
     getPhotoId(itemid) {
       var id = this.raw.filter(function (e) {
         return e.ack_code == itemid
@@ -924,19 +908,28 @@ var checklist_mod = {
     },
     closeForm() { location.reload() },
     loadMeta() { var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; loadmetadata(input) },
+    getItemCompleted(item) {
+      if ((item.ack_completed == '' || item.ack_completed == '-')
+        && item.ack_checklistdatetime == ''
+        && item.ack_checklistdate == ''
+        && item.ack_freetext == ''
+        && item.ack_finding == ''
+        && item.ack_value == ''
+        && item.ack_ok == ''
+        && item.ack_adjusted == ''
+        && item.ack_yes == ''
+        && item.ack_no == ''
+        && item.ack_not_applicable == '') {
+        return false
+      }
+      else { return true }
+    },
     getGroupCompleted(group) {
+      var app = this;
       return group.items.filter(function (item) {
-        return !((item.ack_completed == '' || item.ack_completed == '-')
-          && item.ack_checklistdatetime == ''
-          && item.ack_checklistdate == ''
-          && item.ack_freetext == ''
-          && item.ack_finding == ''
-          && item.ack_value == ''
-          && item.ack_ok == ''
-          && item.ack_adjusted == ''
-          && item.ack_yes == ''
-          && item.ack_no == ''
-          && item.ack_not_applicable == '')
+        var completed = app.getItemCompleted(item);
+        if (item.ack_requiredtoclose === 'NO') { completed = true }
+        return !completed
       }).length
     },
     getAllCompleted() {
@@ -1025,7 +1018,6 @@ var checklist_mod = {
         fetch(checklist_req)
           .then(function (response) { return response.json() })
           .then(function (data) {
-            console.log(data)
             if (data.status != undefined && data.status === false) {
               alert.add({ text: data.text, type: 'error' })
             }
