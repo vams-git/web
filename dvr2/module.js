@@ -929,7 +929,7 @@ var checklist_mod = {
       return group.items.filter(function (item) {
         var completed = app.getItemCompleted(item);
         if (item.ack_requiredtoclose === 'NO') { completed = true }
-        return !completed
+        return completed
       }).length
     },
     getAllCompleted() {
