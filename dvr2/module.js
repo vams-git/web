@@ -64,7 +64,7 @@ var form_mod = {
       else { return false }
     },
     addUser(user) { this.user = user },
-    addEquiment(equipment) { this.equipment = equipment },
+    addEquipment(equipment) { this.equipment = equipment },
     newForm(event) { build_new_form() },
     getData() {
       var data = this.data;
