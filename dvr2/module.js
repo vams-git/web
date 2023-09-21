@@ -42,8 +42,8 @@ var form_mod = {
       this.data = [];
       this.broken = false;
       this.loaded = false;
-      this.user= '';
-      this.equipment= '';
+      this.user = '';
+      this.equipment = '';
       this.form = false;
       this.new_form = true;
     },
@@ -926,10 +926,14 @@ var checklist_mod = {
     },
     getGroupCompleted(group) {
       var app = this;
+      return group.items.filter(function (item) { return app.getItemCompleted(item) }).length
+    },
+    getGroupCount(group) {
+      var app = this;
       return group.items.filter(function (item) {
-        var completed = app.getItemCompleted(item);
-        if (item.ack_requiredtoclose === 'NO') { completed = true }
-        return completed
+        var required = g.ack_requiredtoclose !== 'NO';
+        if (g.ack_requiredtoclose === 'NO' && getItemCompleted(item)) { required === true }
+        return required
       }).length
     },
     getAllCompleted() {
