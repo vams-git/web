@@ -265,11 +265,12 @@
         </div>
       </div>
       <div class="vstack gap-2" v-if="form != true">
-        <button @click="loadForm" type="button" class="btn btn-primary" v-if="data.length != 0 " :id="dt['ock_code']"
-          v-for="dt in data" :key="dt['ock_code']">
+        <button @click="loadForm" type="button" class="btn btn-primary" :disabled="form_ready()"
+          v-if="data.length != 0 " :id="dt['ock_code']" v-for="dt in data" :key="dt['ock_code']">
           {{ dt['trunc_ock_startdate'] + ' ' + dt['state'] + ' (' + dt['ock_status_desc'] + ')'}}
         </button>
-        <button @click="newForm" type="button" class="btn btn-primary" v-if="new_form" id="new_checklist">New
+        <button @click="newForm" type="button" class="btn btn-primary" :disabled="form_ready()" v-if="new_form"
+          id="new_checklist">New
           DVR</button>
       </div>
     </div>
@@ -309,8 +310,7 @@
                         v-bind="{ 'data-bs-target': '#c'+group.id, 'aria-controls': 'c'+group.id }" @click="loadMeta()">
                         <span class="w-100">{{ group.group_label}}</span>
                         <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group) }} of {{
-                          group.items.filter(function(j){return j.ack_requiredtoclose === 'YES' ||
-                          (j.ack_requiredtoclose === 'NO' && j.updated === true)}).length}} done )</span>
+                          getGroupCount(group) }} done )</span>
                       </button>
                     </div>
                     <div
@@ -478,11 +478,14 @@
         </div>
         <div class="card-footer hstack gap-2 bg-light text-center p-3">
           <button v-show="!data.status" type="button" @click="submitForm()" :disabled="!getAllCompleted()"
-            class="btn mx-auto w-50 btn-primary"><span v-if="!getAllCompleted()">...</span><span
-              v-else>Submit</span></button>
-          <button v-show="!data.status" type="button" @click="cancelForm()"
+            :class="'btn mx-auto w-50 '+ [ !getAllCompleted() && !isSync() ? 'btn-outline-danger' : !getAllCompleted() && isSync() ? 'btn-outline-secondary' : 'btn-primary']">
+            <span v-if="!getAllCompleted() && !isSync()">incomplete</span>
+            <span v-else-if="!getAllCompleted() && isSync()">syncing</span>
+            <span v-else>Submit</span>
+          </button>
+          <button v-show="!data.status" type="button" @click="cancelForm()" :disabled="isSync()"
             class="btn mx-auto w-50 btn-secondary"><span>Cancel</span></button>
-          <button v-show="data.status" type="button" @click="closeForm()"
+          <button v-show="data.status" type="button" @click="closeForm()" :disabled="isSync()"
             class="btn mx-auto w-50 btn-primary">Close</button>
         </div>
       </div>
@@ -522,6 +525,7 @@
     dvr_button.addEventListener("click", function (event) { dvr_mgmt.loaded = true });
 
     var param;
+    var watching = {};
     var start = false;
     var gas = "https://script.google.com/macros/s/AKfycbzSznniNEh_L5YP4ESIrZVkvY0U6NCy3_0bnpnGBt6_uUWeUfcM3W6X9MrBX3y7hOi82w/exec";
 
@@ -596,11 +600,11 @@
               type: 'error'
             })
           }
-          else { location.reload() }
+          else { get_forms() }
         })
     }
 
-    function closeForm() { location.reload() }
+    function close_form() { get_forms() }
 
     function send_form(input) {
       checklist.loaded = false;
@@ -620,7 +624,7 @@
             });
       var check = function () {
         if (form.getAllCompleted()) {
-          if (input.reference == 'PRE') { location.reload() }
+          if (input.reference == 'PRE') { get_forms() }
           else {
             if (!start) {
               start = true;
@@ -645,7 +649,7 @@
                       type: 'error'
                     })
                   }
-                  else { location.reload() }
+                  else { get_forms() }
                 });
             }
           }
@@ -679,7 +683,7 @@
               type: 'error'
             })
           }
-          else { location.reload() }
+          else { get_forms() }
         });
     }
 
@@ -716,6 +720,198 @@
       return check;
     };
 
+    function get_forms() {
+      photo_mgmt.init();
+      form.init();
+      checklist.init();
+      payload = [];
+      list = [];
+      fetch(updateUrl(gas, param))
+        .then(function (response) { return response.json() })
+        .then(function (data) {
+          if (data.status != undefined && data.status === false && data.text !== 'query returns null') {
+            alert.add({ text: data.text, type: 'error' });
+            form.broken = true;
+            checklist.broken = true;
+          }
+          else {
+            if (data.text === 'query returns null') { data = [] }
+            else { data = data.text }
+            data = data.filter(function (e) { return e['ock_code'] != undefined });
+            data.forEach(function (e) {
+              if (e['ack_value'] != undefined) { e['ack_value'] = e['ack_value'].replaceAll(',', '') }
+            });
+            payload = payload.concat(data);
+            var reform = payload.map(function (e) {
+              var rep = {};
+              rep['obj_org'] = e['obj_org'];
+              rep['obj_code'] = e['obj_code'];
+              rep['obj_desc'] = e['obj_desc'];
+              rep['obj_udfchar39'] = e['obj_udfchar39'];
+              rep['ock_status'] = e['ock_status'];
+              rep['ock_status_desc'] = e['ock_status_desc'];
+              rep['trunc_ock_startdate'] = e['trunc_ock_startdate'];
+              rep['ock_code'] = e['ock_code'];
+              return rep
+            });
+            var new_ref = [...new Map(reform.map(item =>
+              [item['ock_code'], item])).values()];
+
+            if (new_ref.length > 0) {
+              new_ref.forEach(function (e) {
+                if (e['ock_status'] == 'U') {
+                  var req = payload.filter(function (f) { return f['ack_requiredtoclose'] === 'YES' && f['ock_code'] === e['ock_code'] });
+                  var req_pre = req.filter(function (f) { return f['ack_reference'] === 'PRE' && f['ock_code'] === e['ock_code'] });
+                  var req_post = req.filter(function (f) { return f['ack_reference'] === 'POST' && f['ock_code'] === e['ock_code'] });
+                  var current_pre = req_pre.filter(function (f) {
+                    if (f['ack_type'] == '01' && f['ack_completed'] != undefined && f['ack_completed'] != '-') { return f }
+                    if (f['ack_type'] == '02' && f['ack_yes'] != undefined && f['ack_no'] != undefined) { return f }
+                    if (f['ack_type'] == '03' && f['ack_finding'] != undefined) { return f }
+                    if (f['ack_type'] == '04' && f['ack_value'] != undefined) { return f }
+                    if (f['ack_type'] == '13' && f['ack_checklistdate'] != undefined) { return f }
+                    if (f['ack_type'] == '14' && f['ack_checklistdatetime'] != undefined) { return f }
+                    if (f['ack_type'] == '15' && f['ack_freetext'] != undefined) { return f }
+                  });
+                  if (current_pre.length == req_pre.length) {
+                    e['state'] = 'Post-Trip'
+                  } else { e['state'] = 'Pre-Trip' }
+                } else { e['state'] = '' }
+              })
+            }
+            list = list.concat(new_ref);
+            new_ref.forEach(function (e) { checklist.addItems(e) });
+            checklist.loaded = true;
+            if (checklist.user === '' && user_details !== undefined) {
+              checklist.addUser(user_details)
+            }
+            if (checklist.equipment === '' && equipment_details !== undefined) {
+              checklist.addEquipment(equipment_details)
+            }
+          }
+        });
+    }
+
+    function get_findings() {
+      var findings_url = gas + '?process=get_findings&tenant=' + param.tenant + '&userid=' + param.userid;
+      var findings_req = new Request(findings_url, {
+        redirect: "follow",
+        method: 'POST',
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+      });
+      fetch(findings_req)
+        .then(function (response) { return response.json() })
+        .then(function (data) {
+          if (data.status != undefined && data.status === false) { alert.add({ text: data.text, type: 'error' }) }
+          else { findings = data.text }
+        });
+    }
+
+    function get_user_details() {
+      var user_details_url = gas + '?process=get_user_details&tenant=' + param.tenant + '&userid=' + param.userid;
+      var user_details_req = new Request(user_details_url, {
+        redirect: "follow",
+        method: 'POST',
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+      });
+      fetch(user_details_req)
+        .then(function (response) { return response.json() })
+        .then(function (data) {
+          if (data.status != undefined && data.status === false) { alert.add({ text: data.text, type: 'error' }) }
+          else {
+            user_details = data.text.pop();
+            checklist.addUser(user_details);
+          }
+        });
+    }
+
+    function get_equipment_details() {
+      var equipment_details_url = gas + '?process=get_equipment_details&tenant=' + param.tenant +
+        '&userid=' + param.userid + '&organization=' + param.organization + '&equipmentno=' + param.equipmentno;
+      var equipment_details_req = new Request(equipment_details_url, {
+        redirect: "follow",
+        method: 'POST',
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+      });
+      fetch(equipment_details_req)
+        .then(function (response) { return response.json() })
+        .then(function (data) {
+          if (data.status != undefined && data.status === false) { alert.add({ text: data.text, type: 'error' }) }
+          else {
+            equipment_details = data.text.pop();
+            checklist.addEquipment(equipment_details);
+          }
+        });
+    }
+
+    function get_open_jobs() {
+      var open_jobs_url = gas + '?process=get_open_jobs&tenant=' + param.tenant +
+        '&userid=' + param.userid + '&organization=' + param.organization;
+      if (equipment_details['obj_position'] === undefined || equipment_details['obj_position'] === '') {
+        open_jobs_url = open_jobs_url + '&parentcode=null' + '&equipmentno=' + param.equipmentno;
+      }
+      else {
+        open_jobs_url = open_jobs_url + '&parentcode=' + equipment_details['obj_position'] + '&equipmentno=null';
+      }
+      var open_jobs_req = new Request(open_jobs_url, {
+        redirect: "follow",
+        method: 'POST',
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+      });
+      fetch(open_jobs_req)
+        .then(function (response) { return response.json() })
+        .then(function (data) {
+          if (data.status != undefined && data.status === false) {
+            if (data.text !== 'query returns null') { alert.add({ text: data.text, type: 'error' }) }
+            open_jobs = [];
+            var count = jobs_mgmt.getData().length;
+            document.getElementById('openjobmodalcount').innerHTML = count;
+            if (count > 0) { job_button.classList.remove('disabled') }
+          }
+          else {
+            open_jobs = data.text;
+            open_jobs.forEach(function (e) { jobs_mgmt.addItems(e) });
+            var count = jobs_mgmt.getData().length;
+            document.getElementById('openjobmodalcount').innerHTML = count;
+            if (count > 0) { job_button.classList.remove('disabled') }
+          }
+        });
+    }
+
+    function get_past_dvr() {
+      var dvr_forms_url = gas + '?process=get_forms&tenant=' + param.tenant +
+        '&userid=' + param.userid + '&organization=' + param.organization;
+      if (equipment_details['obj_position'] === undefined || equipment_details['obj_position'] === '') {
+        dvr_forms_url = dvr_forms_url + '&parentcode=null' + '&equipmentno=' + param.equipmentno;
+      }
+      else {
+        dvr_forms_url = dvr_forms_url + '&parentcode=' + equipment_details['obj_position'] + '&equipmentno=null';
+      }
+      var dvr_forms_req = new Request(dvr_forms_url, {
+        redirect: "follow",
+        method: 'POST',
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+      });
+      fetch(dvr_forms_req)
+        .then(function (response) { return response.json() })
+        .then(function (data) {
+          if (data.status != undefined && data.status === false) {
+            if (data.text !== 'query returns null') { alert.add({ text: data.text, type: 'error' }) }
+            dvr_forms = [];
+            var count = dvr_mgmt.getData().length;
+            document.getElementById('pastdvrmodalcount').innerHTML = count;
+            if (count > 0) { dvr_button.classList.remove('disabled') }
+          }
+          else {
+            dvr_forms = data.text;
+            dvr_forms.forEach(function (e) { dvr_mgmt.addItems(e, gas) });
+            dvr_mgmt.getQueue();
+            var count = dvr_mgmt.getData().length;
+            document.getElementById('pastdvrmodalcount').innerHTML = count;
+            if (count > 0) { dvr_button.classList.remove('disabled') }
+          }
+        });
+    }
+
     (function () {
       param = getAllUrlParams();
       if (param.equipmentno == undefined || param.equipmentno == '' || param.organization == undefined || param.organization == '' ||
@@ -736,224 +932,41 @@
         checklist.broken = true;
       }
       else {
-        var findings_req = new Request(gas + '?process=get_findings&tenant=' + param.tenant + '&userid=' + param.userid, {
-          redirect: "follow",
-          method: 'POST',
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-        });
-        fetch(findings_req)
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (data) {
-            if (data.status != undefined && data.status === false) {
-              alert.add({
-                text: data.text,
-                type: 'error'
-              })
-            }
-            else { findings = data.text }
-          });
-        var user_details_req = new Request(gas + '?process=get_user_details&tenant=' + param.tenant + '&userid=' + param.userid, {
-          redirect: "follow",
-          method: 'POST',
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-        });
-        fetch(user_details_req)
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (data) {
-            if (data.status != undefined && data.status === false) {
-              alert.add({
-                text: data.text,
-                type: 'error'
-              })
-            }
-            else {
-              user_details = data.text.pop();
-            }
-          });
-        fetch(updateUrl(gas, param))
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (data) {
-            if (data.status != undefined && data.status === false && data.text !== 'query returns null') {
-              alert.add({
-                text: data.text,
-                type: 'error'
-              });
-              form.broken = true;
-              checklist.broken = true;
-            }
-            else {
-              if (data.text === 'query returns null') { data = [] }
-              else { data = data.text }
-              data = data.filter(function (e) { return e['ock_code'] != undefined });
-              data.forEach(function (e) {
-                if (e['ack_value'] != undefined) { e['ack_value'] = e['ack_value'].replaceAll(',', '') }
-              });
-              payload = payload.concat(data);
-              var reform = payload.map(function (e) {
-                var rep = {};
-                rep['obj_org'] = e['obj_org'];
-                rep['obj_code'] = e['obj_code'];
-                rep['obj_desc'] = e['obj_desc'];
-                rep['obj_udfchar39'] = e['obj_udfchar39'];
-                rep['ock_status'] = e['ock_status'];
-                rep['ock_status_desc'] = e['ock_status_desc'];
-                rep['trunc_ock_startdate'] = e['trunc_ock_startdate'];
-                rep['ock_code'] = e['ock_code'];
-                return rep
-              });
-              var new_ref = [...new Map(reform.map(item =>
-                [item['ock_code'], item])).values()];
-
-              if (new_ref.length > 0) {
-                new_ref.forEach(function (e) {
-                  if (e['ock_status'] == 'U') {
-                    var req = payload.filter(function (f) { return f['ack_requiredtoclose'] === 'YES' && f['ock_code'] === e['ock_code'] });
-                    var req_pre = req.filter(function (f) { return f['ack_reference'] === 'PRE' && f['ock_code'] === e['ock_code'] });
-                    var req_post = req.filter(function (f) { return f['ack_reference'] === 'POST' && f['ock_code'] === e['ock_code'] });
-                    var current_pre = req_pre.filter(function (f) {
-                      if (f['ack_type'] == '01' && f['ack_completed'] != undefined && f['ack_completed'] != '-') { return f }
-                      if (f['ack_type'] == '02' && f['ack_yes'] != undefined && f['ack_no'] != undefined) { return f }
-                      if (f['ack_type'] == '03' && f['ack_finding'] != undefined) { return f }
-                      if (f['ack_type'] == '04' && f['ack_value'] != undefined) { return f }
-                      if (f['ack_type'] == '13' && f['ack_checklistdate'] != undefined) { return f }
-                      if (f['ack_type'] == '14' && f['ack_checklistdatetime'] != undefined) { return f }
-                      if (f['ack_type'] == '15' && f['ack_freetext'] != undefined) { return f }
-                    });
-                    if (current_pre.length == req_pre.length) {
-                      e['state'] = 'Post-Trip'
-                    } else { e['state'] = 'Pre-Trip' }
-                  } else {
-                    e['state'] = ''
-
-                  }
-                })
-              }
-              list = list.concat(new_ref);
-              new_ref.forEach(function (e) {
-                checklist.addItems(e);
-              });
-              checklist.loaded = true;
-            }
-          });
-
-        var equipment_details_req = new Request(gas + '?process=get_equipment_details&tenant=' + param.tenant +
+        var initial_req = new Request(gas + '?process=get_inital&tenant=' + param.tenant +
           '&userid=' + param.userid + '&organization=' + param.organization + '&equipmentno=' + param.equipmentno, {
           redirect: "follow",
           method: 'POST',
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
         });
-        fetch(equipment_details_req)
-          .then(function (response) {
-            return response.json();
-          })
+        fetch(initial_req)
+          .then(function (response) { return response.json() })
           .then(function (data) {
             if (data.status != undefined && data.status === false) {
-              alert.add({
-                text: data.text,
-                type: 'error'
-              })
+              alert.add({ text: data.text, type: 'error' })
             }
             else {
-              equipment_details = data.text.pop();
-              var open_jobs_url = gas + '?process=get_open_jobs&tenant=' + param.tenant +
-                '&userid=' + param.userid + '&organization=' + param.organization;
-              if (equipment_details['obj_position'] === undefined || equipment_details['obj_position'] === '') {
-                open_jobs_url = open_jobs_url + '&parentcode=null' + '&equipmentno=' + param.equipmentno;
-              }
-              else {
-                open_jobs_url = open_jobs_url + '&parentcode=' + equipment_details['obj_position'] + '&equipmentno=null';
-              }
-              var open_jobs_req = new Request(open_jobs_url, {
-                redirect: "follow",
-                method: 'POST',
-                headers: {
-                  "Content-Type": "text/plain;charset=utf-8",
-                },
-              });
-              fetch(open_jobs_req)
-                .then(function (response) {
-                  return response.json();
-                })
-                .then(function (data) {
-                  if (data.status != undefined && data.status === false) {
-                    if (data.text !== 'query returns null') {
-                      alert.add({
-                        text: data.text,
-                        type: 'error'
-                      });
-                    }
-                    open_jobs = [];
-                    var count = jobs_mgmt.getData().length;
-                    document.getElementById('openjobmodalcount').innerHTML = count;
-                    if (count > 0) { job_button.classList.remove('disabled') }
-                  }
-                  else {
-                    open_jobs = data.text;
-                    open_jobs.forEach(function (e) {
-                      jobs_mgmt.addItems(e);
-                    });
-                    var count = jobs_mgmt.getData().length;
-                    document.getElementById('openjobmodalcount').innerHTML = count;
-                    if (count > 0) { job_button.classList.remove('disabled') }
-                  }
-                });
-              var dvr_forms_url = gas + '?process=get_forms&tenant=' + param.tenant +
-                '&userid=' + param.userid + '&organization=' + param.organization;
-              if (equipment_details['obj_position'] === undefined || equipment_details['obj_position'] === '') {
-                dvr_forms_url = dvr_forms_url + '&parentcode=null' + '&equipmentno=' + param.equipmentno;
-              }
-              else {
-                dvr_forms_url = dvr_forms_url + '&parentcode=' + equipment_details['obj_position'] + '&equipmentno=null';
-              }
-              var dvr_forms_req = new Request(dvr_forms_url, {
-                redirect: "follow",
-                method: 'POST',
-                headers: {
-                  "Content-Type": "text/plain;charset=utf-8",
-                },
-              });
-              fetch(dvr_forms_req)
-                .then(function (response) {
-                  return response.json();
-                })
-                .then(function (data) {
-                  if (data.status != undefined && data.status === false) {
-                    if (data.text !== 'query returns null') {
-                      alert.add({
-                        text: data.text,
-                        type: 'error'
-                      });
-                    }
-                    dvr_forms = [];
-                    var count = dvr_mgmt.getData().length;
-                    document.getElementById('pastdvrmodalcount').innerHTML = count;
-                    if (count > 0) { dvr_button.classList.remove('disabled') }
-                  }
-                  else {
-                    dvr_forms = data.text;
-                    dvr_forms.forEach(function (e) {
-                      dvr_mgmt.addItems(e, gas);
-                    });
-                    dvr_mgmt.getQueue();
-                    var count = dvr_mgmt.getData().length;
-                    document.getElementById('pastdvrmodalcount').innerHTML = count;
-                    if (count > 0) { dvr_button.classList.remove('disabled') }
-                  }
-                });
+              var response = data.text.pop();
+              var fnd = response.fnd_code;
+              delete response.fnd_code;
+              fnd = fnd.split(";");
+              fnd = fnd.map(function (e) { return e.split(",") });
+              fnd = fnd.map(function (e) { return { fnd_code: e[0], fnd_desc: e[1] } });
+              findings = JSON.parse(JSON.stringify(fnd));
+              var usr = response.usr_code;
+              delete response.usr_code;
+              usr = usr.split(";");
+              usr = usr.map(function (e) { return e.split(",") });
+              usr_data = {};
+              usr.forEach(function (e) { usr_data[e[0]] = e[1] });
+              user_details = JSON.parse(JSON.stringify(usr_data));
+              checklist.addUser(user_details);
+              equipment_details = JSON.parse(JSON.stringify(response));
+              checklist.addEquipment(equipment_details);
+              get_open_jobs();
+              get_past_dvr();
             }
           });
+        get_forms();
       }
     })();
   </script>

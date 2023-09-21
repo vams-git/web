@@ -31,11 +31,22 @@ var form_mod = {
       data: [],
       broken: false,
       loaded: false,
+      user: '',
+      equipment: '',
       form: false,
       new_form: true
     }
   },
   methods: {
+    init() {
+      this.data = [];
+      this.broken = false;
+      this.loaded = false;
+      this.user = '';
+      this.equipment = '';
+      this.form = false;
+      this.new_form = true;
+    },
     addItems(input) {
       this.data.push(input);
       if (this.data.filter(function (e) {
@@ -48,6 +59,12 @@ var form_mod = {
       if (target.tagName != 'button') { target = target.closest('button') }
       build_form(target.id)
     },
+    form_ready() {
+      if (this.user === undefined || this.equipment === undefined) { return true }
+      else { return false }
+    },
+    addUser(user) { this.user = user },
+    addEquipment(equipment) { this.equipment = equipment },
     newForm(event) { build_new_form() },
     getData() {
       var data = this.data;
@@ -125,6 +142,18 @@ var photo_mod = {
     }
   },
   methods: {
+    init() {
+      this['data'] = {
+        'checklistcode': '',
+        'checklistid': '',
+        'org': '',
+        'photoid': '',
+        'src': '',
+        'loaded': false
+      };
+      this['list'] = false;
+      this['loaded'] = false;
+    },
     updateList(url_prm, ock_code, c) {
       var app_data = this;
       var p = {
@@ -481,7 +510,7 @@ var past_dvr_mod = {
               fetch[0].url = 'data:application/pdf;base64,' + data.text.base;
             }
           }
-          if (past_dvr.length !== 0) { past_dvr.getQueue() }
+          if (past_dvr.queue.length !== 0) { past_dvr.getQueue() }
         })
     },
     closeModal() { this.loaded = false },
@@ -536,11 +565,19 @@ var checklist_mod = {
     return {
       data: {},
       raw: [],
+      sync: [],
       broken: false,
       loaded: false
     }
   },
   methods: {
+    init() {
+      this.data = {};
+      this.raw = [];
+      this.sync = [];
+      this.broken = false;
+      this.loaded = false;
+    },
     addItems(input) {
       input['updated'] = false;
       input['process'] = false;
@@ -736,9 +773,9 @@ var checklist_mod = {
         }
       }
     },
+    isSync() { return this.sync.length !== 0 },
     openPhoto(item) { photo_mgmt.addChecklist(item.ack_code, this.data.wo, this.data.org) },
     snycItems(item, event) {
-      console.log(item)
       if (event != undefined) {
         if (event.target.nodeName == 'TEXTAREA') {
           event.target.style.height = 'auto'
@@ -794,22 +831,6 @@ var checklist_mod = {
       var parent = event.target.closest('div.accordion-body');
       event.target = parent.querySelector('textarea')
       form.snycItems(item, event)
-    },
-    getItemCompleted(item) {
-      if ((item.ack_completed == '' || item.ack_completed == '-')
-        && item.ack_checklistdatetime == ''
-        && item.ack_checklistdate == ''
-        && item.ack_freetext == ''
-        && item.ack_finding == ''
-        && item.ack_value == ''
-        && item.ack_ok == ''
-        && item.ack_adjusted == ''
-        && item.ack_yes == ''
-        && item.ack_no == ''
-        && item.ack_not_applicable == '') {
-        return false
-      }
-      else { return true }
     },
     getPhotoId(itemid) {
       var id = this.raw.filter(function (e) {
@@ -885,24 +906,42 @@ var checklist_mod = {
     cancelForm() {
       var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; cancel_form(input)
     },
-    closeForm() { location.reload() },
+    closeForm() { close_form() },
     loadMeta() { var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; loadmetadata(input) },
+    getItemCompleted(item) {
+      if ((item.ack_completed == '' || item.ack_completed == '-')
+        && item.ack_checklistdatetime == ''
+        && item.ack_checklistdate == ''
+        && item.ack_freetext == ''
+        && item.ack_finding == ''
+        && item.ack_value == ''
+        && item.ack_ok == ''
+        && item.ack_adjusted == ''
+        && item.ack_yes == ''
+        && item.ack_no == ''
+        && item.ack_not_applicable == '') {
+        return false
+      }
+      else { return true }
+    },
     getGroupCompleted(group) {
-      return group.items.filter(function (item) {
-        return !((item.ack_completed == '' || item.ack_completed == '-')
-          && item.ack_checklistdatetime == ''
-          && item.ack_checklistdate == ''
-          && item.ack_freetext == ''
-          && item.ack_finding == ''
-          && item.ack_value == ''
-          && item.ack_ok == ''
-          && item.ack_adjusted == ''
-          && item.ack_yes == ''
-          && item.ack_no == ''
-          && item.ack_not_applicable == '')
-      }).length
+      var app = this;
+      return group.items
+        .filter(function (item) { return item.ack_type !== '14' })
+        .filter(function (item) { return app.getItemCompleted(item) }).length
+    },
+    getGroupCount(group) {
+      var app = this;
+      return group.items
+        .filter(function (item) { return item.ack_type !== '14' })
+        .filter(function (item) {
+          var required = item.ack_requiredtoclose !== 'NO';
+          if (item.ack_requiredtoclose === 'NO' && app.getItemCompleted(item)) { required = true }
+          return required
+        }).length
     },
     getAllCompleted() {
+      var app = this;
       var collection = [];
       this.data.activities.forEach(
         function (e) {
@@ -910,17 +949,7 @@ var checklist_mod = {
             function (f) {
               f.items.forEach(
                 function (g) {
-                  var data = !((g.ack_completed == '' || g.ack_completed == '-')
-                    && g.ack_checklistdatetime == ''
-                    && g.ack_checklistdate == ''
-                    && g.ack_freetext == ''
-                    && g.ack_finding == ''
-                    && g.ack_value == ''
-                    && g.ack_ok == ''
-                    && g.ack_adjusted == ''
-                    && g.ack_yes == ''
-                    && g.ack_no == ''
-                    && g.ack_not_applicable == '');
+                  var data = app.getItemCompleted(g);
                   if (g.ack_requiredtoclose === 'NO') { data = true }
                   if ((g.updated === true && g.process === true) || (g.updated === false && g.process === false)) { var updated = true } else { var updated = false }
                   collection.push({ res: data && updated, ack_code: g.ack_code })
@@ -937,7 +966,9 @@ var checklist_mod = {
     },
     processItems(item) {
       if (item['process'] == false && (Date.now() - item['lastupdate']) >= 3000) {
-        console.log('sending ' + item['ack_code'])
+        var code = item['ack_code'];
+        this.sync.push(code);
+        console.log('sending ' + code);
         var one = '';
         var two = '';
         if (item['ack_type'] == '01') { one = item['ack_completed'] }
@@ -968,7 +999,7 @@ var checklist_mod = {
         if (item['ack_type'] == '15') { one = item['ack_freetext'] }
         var payload = {
           'tenant': param.tenant,
-          'chkcode': item['ack_code'],
+          'chkcode': code,
           'chktype': item['ack_type'],
           'chkdataone': one,
           'chkdatatwo': two,
@@ -981,30 +1012,23 @@ var checklist_mod = {
           redirect: "follow",
           method: 'POST',
           body: JSON.stringify(payload),
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
         });
 
         fetch(checklist_req)
-          .then(function (response) {
-            return response.json();
-          })
+          .then(function (response) { return response.json() })
           .then(function (data) {
             if (data.status != undefined && data.status === false) {
-              alert.add({
-                text: data.text,
-                type: 'error'
-              })
+              alert.add({ text: data.text, type: 'error' })
             }
             else {
-              var id = form.raw.findIndex(function (e) { return e['ack_code'] == item['ack_code'] });
+              var id = form.raw.findIndex(function (e) { return e['ack_code'] == code });
               var raw = form.raw[id];
               item['process'] = raw['process'] = true;
+              form.sync.shift();
             }
           });
       }
     }
   }
-
 }
