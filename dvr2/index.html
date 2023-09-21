@@ -725,6 +725,7 @@
       form.init();
       checklist.init();
       payload = [];
+      list = [];
       fetch(updateUrl(gas, param))
         .then(function (response) { return response.json() })
         .then(function (data) {
