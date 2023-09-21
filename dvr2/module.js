@@ -932,7 +932,7 @@ var checklist_mod = {
       var app = this;
       return group.items.filter(function (item) {
         var required = item.ack_requiredtoclose !== 'NO';
-        if (item.ack_requiredtoclose === 'NO' && app.getItemCompleted(item)) { required === true }
+        if (item.ack_requiredtoclose === 'NO' && app.getItemCompleted(item)) { required = true }
         return required
       }).length
     },
@@ -945,7 +945,7 @@ var checklist_mod = {
             function (f) {
               f.items.forEach(
                 function (g) {
-                  var data = !app.getItemCompleted(g);
+                  var data = app.getItemCompleted(g);
                   if (g.ack_requiredtoclose === 'NO') { data = true }
                   if ((g.updated === true && g.process === true) || (g.updated === false && g.process === false)) { var updated = true } else { var updated = false }
                   collection.push({ res: data && updated, ack_code: g.ack_code })
