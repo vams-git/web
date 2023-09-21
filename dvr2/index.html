@@ -781,6 +781,13 @@
             list = list.concat(new_ref);
             new_ref.forEach(function (e) { checklist.addItems(e) });
             checklist.loaded = true;
+            if (checklist.user === '' && user_details !== undefined) {
+              checklist.addUser(user_details)
+            }
+            if (checklist.equipment === '' && equipment_details !== undefined) {
+              checklist.addEquipment(equipment_details)
+            }
+
           }
         });
     }
