@@ -931,8 +931,8 @@ var checklist_mod = {
     getGroupCount(group) {
       var app = this;
       return group.items.filter(function (item) {
-        var required = g.ack_requiredtoclose !== 'NO';
-        if (g.ack_requiredtoclose === 'NO' && getItemCompleted(item)) { required === true }
+        var required = item.ack_requiredtoclose !== 'NO';
+        if (item.ack_requiredtoclose === 'NO' && getItemCompleted(item)) { required === true }
         return required
       }).length
     },
@@ -944,17 +944,7 @@ var checklist_mod = {
             function (f) {
               f.items.forEach(
                 function (g) {
-                  var data = !((g.ack_completed == '' || g.ack_completed == '-')
-                    && g.ack_checklistdatetime == ''
-                    && g.ack_checklistdate == ''
-                    && g.ack_freetext == ''
-                    && g.ack_finding == ''
-                    && g.ack_value == ''
-                    && g.ack_ok == ''
-                    && g.ack_adjusted == ''
-                    && g.ack_yes == ''
-                    && g.ack_no == ''
-                    && g.ack_not_applicable == '');
+                  var data = !getItemCompleted(g);
                   if (g.ack_requiredtoclose === 'NO') { data = true }
                   if ((g.updated === true && g.process === true) || (g.updated === false && g.process === false)) { var updated = true } else { var updated = false }
                   collection.push({ res: data && updated, ack_code: g.ack_code })
