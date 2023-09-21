@@ -926,15 +926,19 @@ var checklist_mod = {
     },
     getGroupCompleted(group) {
       var app = this;
-      return group.items.filter(function (item) { return app.getItemCompleted(item) }).length
+      return group.items
+        .filter(function (item) { return item.ack_type !== '14' })
+        .filter(function (item) { return app.getItemCompleted(item) }).length
     },
     getGroupCount(group) {
       var app = this;
-      return group.items.filter(function (item) {
-        var required = item.ack_requiredtoclose !== 'NO';
-        if (item.ack_requiredtoclose === 'NO' && app.getItemCompleted(item)) { required = true }
-        return required
-      }).length
+      return group.items
+        .filter(function (item) { return item.ack_type !== '14' })
+        .filter(function (item) {
+          var required = item.ack_requiredtoclose !== 'NO';
+          if (item.ack_requiredtoclose === 'NO' && app.getItemCompleted(item)) { required = true }
+          return required
+        }).length
     },
     getAllCompleted() {
       var app = this;
