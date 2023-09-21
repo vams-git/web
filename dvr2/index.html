@@ -478,7 +478,7 @@
         </div>
         <div class="card-footer hstack gap-2 bg-light text-center p-3">
           <button v-show="!data.status" type="button" @click="submitForm()" :disabled="!getAllCompleted()"
-            class="btn mx-auto w-50 btn-primary">
+            :class="'btn mx-auto w-50 '+ [ !getAllCompleted() && !isSync() ? 'btn-outline-danger' : !getAllCompleted() && isSync() ? 'btn-outline-secondary' : 'btn-primary']">
             <span v-if="!getAllCompleted() && !isSync()">incomplete</span>
             <span v-else-if="!getAllCompleted() && isSync()">syncing</span>
             <span v-else>Submit</span>
