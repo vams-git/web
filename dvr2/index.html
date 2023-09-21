@@ -309,7 +309,8 @@
                         data-bs-toggle="collapse" aria-expanded="false"
                         v-bind="{ 'data-bs-target': '#c'+group.id, 'aria-controls': 'c'+group.id }" @click="loadMeta()">
                         <span class="w-100">{{ group.group_label}}</span>
-                        <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group) }} of {{ getGroupCount(group) }} done )</span>
+                        <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group) }} of {{
+                          getGroupCount(group) }} done )</span>
                       </button>
                     </div>
                     <div
@@ -482,9 +483,9 @@
             <span v-else-if="!getAllCompleted() && isSync()">syncing...</span>
             <span v-else>Submit</span>
           </button>
-          <button v-show="!data.status" type="button" @click="cancelForm()"
+          <button v-show="!data.status" type="button" @click="cancelForm()" :disabled="!isSync()"
             class="btn mx-auto w-50 btn-secondary"><span>Cancel</span></button>
-          <button v-show="data.status" type="button" @click="closeForm()"
+          <button v-show="data.status" type="button" @click="closeForm()" :disabled="!isSync()"
             class="btn mx-auto w-50 btn-primary">Close</button>
         </div>
       </div>

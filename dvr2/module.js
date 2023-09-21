@@ -962,8 +962,9 @@ var checklist_mod = {
     },
     processItems(item) {
       if (item['process'] == false && (Date.now() - item['lastupdate']) >= 3000) {
-        this.sync.push(item['ack_code']);
-        console.log('sending ' + item['ack_code'])
+        var code = item['ack_code'];
+        this.sync.push(code);
+        console.log('sending ' + code);
         var one = '';
         var two = '';
         if (item['ack_type'] == '01') { one = item['ack_completed'] }
@@ -994,7 +995,7 @@ var checklist_mod = {
         if (item['ack_type'] == '15') { one = item['ack_freetext'] }
         var payload = {
           'tenant': param.tenant,
-          'chkcode': item['ack_code'],
+          'chkcode': code,
           'chktype': item['ack_type'],
           'chkdataone': one,
           'chkdatatwo': two,
@@ -1017,7 +1018,7 @@ var checklist_mod = {
               alert.add({ text: data.text, type: 'error' })
             }
             else {
-              var id = form.raw.findIndex(function (e) { return e['ack_code'] == item['ack_code'] });
+              var id = form.raw.findIndex(function (e) { return e['ack_code'] == code });
               var raw = form.raw[id];
               item['process'] = raw['process'] = true;
               form.sync.shift();
