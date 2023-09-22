@@ -907,7 +907,7 @@ var checklist_mod = {
       var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; cancel_form(input)
     },
     closeForm() { close_form() },
-    loadMeta() { var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; loadmetadata(input) },
+    loadMeta() { console.log('loadmetacalled'); var input = {}; input.reference = this.data.reference; input.ock_code = this.data.wo; loadmetadata(input) },
     getItemCompleted(item) {
       if ((item.ack_completed == '' || item.ack_completed == '-')
         && item.ack_checklistdatetime == ''
