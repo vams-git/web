@@ -13,7 +13,7 @@
   <style>
     .veo-top {
       border-top-right-radius: 2.5em;
-      min-height: 2.5em;
+      min-height: 4rem;
     }
 
     .bg-veo {
@@ -21,55 +21,57 @@
       text-align: center !important;
     }
 
-    .veo-mid {
-      min-height: 5rem;
-    }
-
     .veo-btm {
-      min-height: 2.5rem;
+      min-height: 4rem;
       border-bottom-left-radius: 2.5rem;
     }
   </style>
 </head>
 
-<body class="px-3 py-5 vh-100 w-100 bg-body-tertiary">
-  <div class="d-none d-sm-block h-100">
-    <div class="px-5 container h-100 vstack">
-      <div class="veo-top bg-veo d-block"></div>
-      <div class="veo-mid bg-veo d-block"></div>
-      <div class="veo-mid bg-veo flex-grow-1 d-block d-flex align-items-end">
-        <div class="m-auto lead fs-2 text-white col-8 col-lg-6 ">
-          <img class="my-4" src="https://vams-git.github.io/webservice/assets/R_SYMBOL_HD_2.png" height="160rem">
-          <p>VAMS is currently not available. Maintenance is expected to be
-            completed at</p>
-          <p class="maint-date font-monospace"></p>
-        </div>
-      </div>
-      <div class="veo-mid bg-veo d-block"></div>
-      <div class="veo-btm bg-veo d-block"></div>
+<body class="vh-100 bg-light">
+  <div class="container h-100  vstack">
+    <div class="row">
+      <div class="col p-4 d-block"></div>
     </div>
-  </div>
-  <div class="d-block d-sm-none h-100">
-    <div class="h-100 vstack">
-      <div class="veo-top bg-veo d-block"></div>
-      <div class="veo-mid bg-veo d-block"></div>
-      <div class="veo-mid bg-veo flex-grow-1 d-block d-flex align-items-end">
-        <div class="m-auto lead fs-2 text-white col-8 col-lg-6 ">
-          <img class="my-4" src="https://vams-git.github.io/webservice/assets/R_SYMBOL_HD_2.png" height="160rem">
-          <p>VAMS is currently not available. Maintenance is expected to be
-            completed at</p>
-          <p id="date" class="maint-date font-monospace"></p>
+    <div class="row h-100 mb-auto">
+      <div class="d-none d-md-block col-md-1 col-xl-2"></div>
+
+      <div class="col">
+        <div class="h-100 vstack">
+          <div class="veo-top bg-veo d-block"></div>
+
+          <div class="bg-veo vstack text-center gap-4 text-white">
+            <p class="d-block py-5"></p>
+            <img class="mx-auto" src="https://vams-git.github.io/webservice/assets/R_SYMBOL_HD_2.png" height="140rem">
+            <p class=" px-3 vstack gap-2">
+              <span class="display-5 ">VAMS is currently not available</span>
+              <span class="lead fs-3">Maintenance is expected to be
+                completed at</span>
+              <span id="maint-date" class="fw-semibold lead mb-5 vstack px-3"></span>
+            </p>
+          </div>
+
+          <div class="veo-btm bg-veo d-block"></div>
         </div>
       </div>
-      <div class="veo-mid bg-veo d-block"></div>
-      <div class="veo-btm bg-veo d-block"></div>
+      <div class="d-none d-md-block col-md-1 col-xl-2"></div>
+    </div>
+    <div class="row">
+      <div class="col p-4 d-block"></div>
     </div>
   </div>
   <script src="https://vams-git.github.io/webservice/assets/js/bootstrap.bundle.min.js"></script>
   <script>
-    var date = new Date('2024-01-27T14:00:00.000+11:00');
-    var dates = document.getElementsByClassName('maint-date');
-    Array.prototype.filter.call(dates, function (e) { e.innerHTML = date });
+    var dates = (new Date('2024-01-27T14:00:00.000+11:00')).toString().split(' (');
+    dates[1] = '(' + dates[1];
+    var date_block = document.getElementById('maint-date');
+    dates.forEach(function (e) {
+      var span = document.createElement('span');
+      span.className = 'font-monospace px-5';
+      var datetext = document.createTextNode(e);
+      span.appendChild(datetext);
+      date_block.appendChild(span);
+    })
   </script>
 </body>
 
