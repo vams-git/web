@@ -10,7 +10,6 @@
     type="image/png" />
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://vams-git.github.io/webservice/assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://vams-git.github.io/webservice/assets/bootstrap-icons.css" />
   <style>
     .veo-top {
       border-top-right-radius: 2.5em;
@@ -43,7 +42,7 @@
           <img class="my-4" src="https://vams-git.github.io/webservice/assets/R_SYMBOL_HD_2.png" height="160rem">
           <p>VAMS is currently not available. Maintenance is expected to be
             completed at</p>
-          <p class="font-monospace">27th Jan 2024 14:00PM AEST</p>
+          <p class="maint-date font-monospace"></p>
         </div>
       </div>
       <div class="veo-mid bg-veo d-block"></div>
@@ -59,7 +58,7 @@
           <img class="my-4" src="https://vams-git.github.io/webservice/assets/R_SYMBOL_HD_2.png" height="160rem">
           <p>VAMS is currently not available. Maintenance is expected to be
             completed at</p>
-          <p class="font-monospace">27th Jan 2024 14:00PM AEST</p>
+          <p id="date" class="maint-date font-monospace"></p>
         </div>
       </div>
       <div class="veo-mid bg-veo d-block"></div>
@@ -67,6 +66,11 @@
     </div>
   </div>
   <script src="https://vams-git.github.io/webservice/assets/js/bootstrap.bundle.min.js"></script>
+  <script>
+    var date = new Date('2024-01-27T14:00:00.000+11:00');
+    var dates = document.getElementsByClassName('maint-date');
+    Array.prototype.filter.call(dates, function (e) { e.innerHTML = date });
+  </script>
 </body>
 
 </html>
