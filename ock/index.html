@@ -5,14 +5,13 @@
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VAMS Checklist</title>
+  <link rel="icon" href="https://afiqrostam.github.io/vams-checklist/icon.png" size="64x64" type="image/png">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css"
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link href="../webservice/ock/assets/css/style.css" rel="stylesheet" />
-  <title>VAMS Checklist</title>
-  <link rel="icon" href="https://afiqrostam.github.io/vams-checklist/icon.png" size="64x64" type="image/png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link href="../ock/assets/css/style.css" rel="stylesheet" />
 </head>
 
 <body class="bg-light">
@@ -493,11 +492,11 @@
   </div>
   <!-- Optional JavaScript; choose one of the two! -->
   <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"
     crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <script src="../webservice/ock/assets/js/script.js"></script>
-  <script src="../webservice/ock/assets/js/module.js"></script>
+  <script src="../ock/assets/js/script.js"></script>
+  <script src="../ock/assets/js/module.js"></script>
   <script>
 
     var payload = [];
@@ -525,7 +524,7 @@
     var param;
     var watching = {};
     var start = false;
-    var gas = "https://script.google.com/macros/s/AKfycbzSznniNEh_L5YP4ESIrZVkvY0U6NCy3_0bnpnGBt6_uUWeUfcM3W6X9MrBX3y7hOi82w/exec";
+    var gas = "https://script.google.com/macros/s/AKfycbxsK3QoJ2Qce-OAgEEF7TTGPx390FFp-l3y1lxpGc4g373_YpE-wGeB4adOsYAwLZ2R/exec";
 
     function build_form(input) {
       var new_state = list.filter(function (e) { return e['ock_code'] == input })[0].state;
