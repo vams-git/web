@@ -1,0 +1,252 @@
+  <!-- main -->
+  <div id="check" class="container p-1">
+    <div class="min-vh-95 d-flex align-items-center justify-content-center" v-if="loaded == false">
+      <div class="spinner-grow text-dark" role="status" v-show="broken == false">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div class="fs-1 text-center lead" v-show="broken == true">
+        <i class="bi bi-cloud-lightning-rain big"></i>
+        <p>Oh no! Something broken</p>
+      </div>
+    </div>
+    <div v-else>
+      <div class="alert alert-info alert-dismissible fade show mb-2">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="small">
+          <ul class="list-unstyled px-1 m-0">
+            <li>When updating, the tickbox on each checklist items indicates:</li>
+            <li><i class="bi bi-circle pe-2"></i><span>unanswered checklist;</span></li>
+            <li><i class="bi bi-circle text-info pe-2"></i><span>unanswered checklist synced to VAMS;</span></li>
+            <li><i class="bi bi-check-circle pe-2"></i><span>answered checklist;</span></li>
+            <li><i class="bi bi-check-circle-fill text-info pe-2"></i><span>answered checklist synced to VAMS;</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="vstack gap-2" v-if="form != true">
+        <button @click="loadForm" type="button" class="btn btn-primary" :disabled="form_ready()"
+          v-if="data.length != 0 " :id="dt['ock_code']" v-for="dt in data" :key="dt['ock_code']">
+          {{ dt['trunc_ock_startdate'] + ' ' + dt['state'] + ' (' + dt['ock_status_desc'] + ')'}}
+        </button>
+        <button @click="newForm" type="button" class="btn btn-primary" :disabled="form_ready()" v-if="new_form"
+          id="new_checklist">New
+          DVR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- checklist -->
+  <div id="form">
+    <div id="form-container" class="container p-1 mb-5" v-if="loaded == true">
+      <div class="min-vh-95 d-flex align-items-center justify-content-center" v-if="Object.keys(data).length == 0">
+        <div class="spinner-grow text-dark" role="status" v-show="broken == false">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="fs-1 text-center lead" v-show="broken == true">
+          <i class="bi bi-cloud-lightning-rain big"></i>
+          <p>Oh no! Something broken</p>
+        </div>
+      </div>
+      <div class="card" v-else>
+        <div class="accordion accordion-flush" :id="data.id">
+          <div class="accordion-item" v-for="( activity, index ) in data.activities" :key="activity.id">
+            <div class="accordion-header" :id="'h'+activity.id">
+              <button :class="'accordion-button bg-light py-3 '+[ index == 0 ? '' : 'collapsed']" type="button"
+                data-bs-toggle="collapse" aria-expanded="false"
+                v-bind="{ 'data-bs-target': '#c'+activity.id, 'aria-controls': 'c'+activity.id }" @click="loadMeta()">
+                <span class="h6 p-0 m-0">{{ activity.act_note}}</span>
+              </button>
+            </div>
+            <div
+              v-bind="{ 'id': 'c'+activity.id, 'aria-labelledby': 'h'+activity.id, 'data-bs-parent': '#'+activity.parentid }"
+              :class="'accordion-collapse collapse '+[ index == 0 ? 'show' : '']">
+              <template v-if="activity.groups !== undefined">
+                <div class="accordion accordion-flush" :id="activity.id">
+                  <div class="accordion-item" v-for="group in activity.groups" :key="group.id">
+                    <div class="accordion-header" :id="'h'+group.id">
+                      <button class="accordion-button py-2 bg-secondary bg-opacity-25 collapsed" type="button"
+                        data-bs-toggle="collapse" aria-expanded="false"
+                        v-bind="{ 'data-bs-target': '#c'+group.id, 'aria-controls': 'c'+group.id }" @click="loadMeta()">
+                        <span class="w-100">{{ group.group_label}}</span>
+                        <span class="small fw-light pe-2 text-nowrap">( {{ getGroupCompleted(group) }} of {{
+                          getGroupCount(group) }} done )</span>
+                      </button>
+                    </div>
+                    <div
+                      v-bind="{ 'id': 'c'+group.id, 'aria-labelledby': 'h'+group.id, 'data-bs-parent': '#'+group.parentid }"
+                      class="accordion-collapse collapse">
+                      <template v-if="group.items !== undefined">
+                        <div class="accordion accordion-flush" :id="group.id">
+                          <div class="accordion-item bg-light"
+                            v-if="(group.group_code === 'F-200104' || group.group_code === 'F-200102')">
+                            <div class="accordion-body py-2 row text-body-tertiary small">
+                              <span class="col-12 col-sm-4 col-md-4 hstack gap-1">
+                                <i class="bi bi-check-square-fill"></i>
+                                <span class="lh-1">No Obvious Defect / Done</span>
+                              </span>
+                              <span class="col-12 col-sm-4 col-md-3 hstack gap-1">
+                                <i class="bi bi-x-square-fill"></i>
+                                <span class="lh-1">Fault Identified</span>
+                              </span>
+                              <span class="col-12 col-sm-4 col-md-3 hstack gap-1">
+                                <i class="bi bi-slash-square-fill"></i>
+                                <span class="lh-1">Not Applicable</span>
+                              </span>
+                            </div>
+                          </div>
+                          <div :class="'accordion-item '+[getdisplay(item) ? '' : 'd-none']" v-for="item in group.items"
+                            :key="item.ack_code">
+                            <div class="accordion-body py-2 row">
+                              <div class="col col-md-4 d-flex align-items-center"
+                                v-if="['03','04','13','14','15'].indexOf(item.ack_type) != -1">
+                                <span>{{ item.ack_desc }}</span>
+                                <p v-if="item.ack_taskchecklistcode_comments != ''" class="pre-line m-0">{{
+                                  item.ack_taskchecklistcode_comments }}</p>
+                                <template v-else></template>
+                                <span v-if="getStartReading(item) !== '' && !data.status"
+                                  class="ps-2 ms-md-auto text-muted small">{{parseInt(getStartReading(item),10).toLocaleString()}}
+                                  {{ item.ack_uom
+                                  }}</span>
+
+                                <template v-else></template>
+                              </div>
+                              <div class="col-md hstack gap-2 fw-light"
+                                v-if="['03','04','13','14','15'].indexOf(item.ack_type) != -1">
+                                <input v-if="item.ack_type == 13" type="date"
+                                  class="form-control border-0 border-bottom" :id="'FREE'+item.ack_code"
+                                  autocomplete="off" v-model="item.ack_checklistdate" @input="snycItems(item,$event)"
+                                  @focus="snycItems(item,$event)" @keyup="snycItems(item,$event)"
+                                  :disabled="data.status">
+                                <input v-if="item.ack_type == 14" type="datetime-local"
+                                  class="form-control border-0 border-bottom" :id="'FREE'+item.ack_code"
+                                  autocomplete="off" v-model="item.ack_checklistdatetime"
+                                  @input="snycItems(item,$event)" @focus="snycItems(item,$event)"
+                                  @keyup="snycItems(item,$event)" :disabled="data.status">
+                                <input v-if="item.ack_type == 15" type="text"
+                                  class="form-control border-0 border-bottom" :id="'FREE'+item.ack_code"
+                                  autocomplete="off" v-model="item.ack_freetext" @input="snycItems(item,$event)"
+                                  @focus="snycItems(item,$event)" @keyup="snycItems(item,$event)"
+                                  :disabled="data.status || ['Unit/Fleet No','Registration No','Worker Name'].indexOf(item.ack_desc) != -1">
+                                <div class="input-group" v-if="item.ack_type == '04'">
+                                  <input type="number" v-model="item.ack_value" @input="snycItems(item,$event)"
+                                    @focus="snycItems(item,$event)" @keyup="snycItems(item,$event)"
+                                    class="form-control border-0 border-end border-bottom" :placeholder="item.ack_desc"
+                                    :disabled="data.status" :id="'FREE'+item.ack_code">
+                                  <span class="input-group-text border-0 bg-light border-bottom">{{ item.ack_uom
+                                    }}</span>
+                                </div>
+                                <div v-if="item.ack_type == 03" class="my-2 hstack gap-2">
+                                  <div class="col d-none">
+                                    <input type="radio" v-model="item.ack_finding"
+                                      :id="'FREE'+item.ack_code+'_chk_null'" value="" autocomplete="off" checked>
+                                  </div>
+                                  <div class="col" v-for="option in item.ack_possiblefindings">
+                                    <input type="radio" class="btn-check" @change="snycItems(item,$event)"
+                                      v-model.lazy="item.ack_finding" :id="'FREE'+item.ack_code+'_chk_'+option.value"
+                                      :value="option.value" autocomplete="off" :disabled="data.status">
+                                    <label class="btn btn-outline-primary"
+                                      :for="'FREE'+item.ack_code+'_chk_'+option.value"
+                                      v-html="getOptionHTML(option.value)"></label>
+                                  </div>
+                                  <span v-if="item.ack_finding == 'Z029' && !data.status"
+                                    class="hstack small text-danger gap-2"><i class="bi bi-exclamation-circle-fill"></i>
+                                    Enter faults identified in the Faults
+                                    section </span>
+                                </div>
+                                <button type="button" :id="'REFRESH'+item.ack_code" v-show="!data.status"
+                                  :class="'ms-auto btn btn-sm rounded-circle btn-outline-secondary '+[ ['Unit/Fleet No','Registration No','Worker Name'].indexOf(item.ack_desc) != -1 ? ' d-none' : '']"
+                                  @click="resetItems(item,$event)"><i class="bi bi-arrow-repeat"></i></button>
+                                <i class="bi bi-circle pe-2"
+                                  v-if="!getItemCompleted(item) && !item.updated && !item.process"></i>
+                                <i class="bi bi-circle-fill pe-2"
+                                  v-if="!getItemCompleted(item) && item.updated && !item.process"></i>
+                                <i class="bi bi-circle text-info pe-2"
+                                  v-if="!getItemCompleted(item) && item.updated && item.process"></i>
+                                <i class="bi bi-check-circle pe-2"
+                                  v-if="getItemCompleted(item) && !item.updated && !item.process"></i>
+                                <i class="bi bi-check-circle-fill pe-2"
+                                  v-if="getItemCompleted(item) && item.updated && !item.process"></i>
+                                <i class="bi bi-check-circle-fill text-info pe-2"
+                                  v-if="getItemCompleted(item) && item.updated && item.process"></i>
+                              </div>
+                              <div class="hstack gap-2 fw-light" v-if="['01'].indexOf(item.ack_type) != -1">
+                                <input type="checkbox" class="btn-check" :id="'FREE'+item.ack_code" autocomplete="off"
+                                  v-model="item.ack_completed" true-value="+" false-value="-" :disabled="data.status"
+                                  @change="snycItems(item,$event)">
+                                <label class="btn btn-outline-primary d-block" :for="'FREE'+item.ack_code"><i
+                                    class="bi bi-check-lg"></i></label>
+                                <div class="col">
+                                  <span>{{ item.ack_desc }}</span>
+                                  <p v-if="item.ack_taskchecklistcode_comments != ''" class="pre-line m-0">{{
+                                    item.ack_taskchecklistcode_comments }}</p>
+                                </div>
+                                <button type="button" :id="'REFRESH'+item.ack_code" v-show="!data.status"
+                                  class="ms-auto btn btn-sm rounded-circle btn-outline-secondary"
+                                  @click="resetItems(item,$event)"><i class="bi bi-arrow-repeat"></i></button>
+                                <i class="bi bi-circle pe-2"
+                                  v-if="!getItemCompleted(item) && !item.updated && !item.process"></i>
+                                <i class="bi bi-circle-fill pe-2"
+                                  v-if="!getItemCompleted(item) && item.updated && !item.process"></i>
+                                <i class="bi bi-circle text-info pe-2"
+                                  v-if="!getItemCompleted(item) && item.updated && item.process"></i>
+                                <i class="bi bi-check-circle pe-2"
+                                  v-if="getItemCompleted(item) && !item.updated && !item.process"></i>
+                                <i class="bi bi-check-circle-fill pe-2"
+                                  v-if="getItemCompleted(item) && item.updated && !item.process"></i>
+                                <i class="bi bi-check-circle-fill text-info pe-2"
+                                  v-if="getItemCompleted(item) && item.updated && item.process"></i>
+                              </div>
+                              <div class="hstack gap-2 py-2" v-if="hasTextArea(item)">
+                                <div class="w-100 form-floating me-auto">
+                                  <textarea :ref="'NOTES'+item.ack_code" :id="'NOTES'+item.ack_code"
+                                    :class="'form-control '+[ item.ack_notes == '' ? 'bg-warning-subtle' : '']"
+                                    :disabled="data.status" v-model="item.ack_notes" @input="snycItems(item,$event)"
+                                    @focus="snycItems(item,$event)" @keyup="snycItems(item,$event)"
+                                    placeholder="..."></textarea>
+                                  <label class="ps-4" :for="'NOTES'+item.ack_code">Notes</label>
+                                </div>
+                                <button :id="'PHOTO'+item.ack_code" type="button"
+                                  :class="'btn btn-sm ' + [ getPhotoId(item.ack_code) == '' ? 'btn-outline-primary' : 'btn-primary']"
+                                  data-bs-toggle="modal" data-bs-target="#newPage" @click="openPhoto(item)">
+                                  <i class="bi bi-camera fs-4"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="accordion-item" v-if="group.group_code === 'F-200105' && !data.status">
+                            <div class="accordion-body py-3 row">
+                              <div class="col-md hstack gap-2 fw-light">
+                                <select class="form-select border-0 border-bottom" autocomplete="off"
+                                  @change="selectFault" :disabled="data.status">
+                                  <option value="">select a fault category</option>
+                                  <option v-for="option in openFaults()" :value="option.value">
+                                    {{ option.text }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer hstack gap-2 bg-light text-center p-3">
+          <button v-show="!data.status" type="button" @click="submitForm()" :disabled="!getAllCompleted()"
+            :class="'btn mx-auto w-50 '+ [ !getAllCompleted() && !isSync() ? 'btn-outline-danger' : !getAllCompleted() && isSync() ? 'btn-outline-secondary' : 'btn-primary']">
+            <span v-if="!getAllCompleted() && !isSync()">incomplete</span>
+            <span v-else-if="!getAllCompleted() && isSync()">syncing</span>
+            <span v-else>Submit</span>
+          </button>
+          <button v-show="!data.status" type="button" @click="cancelForm()" :disabled="isSync()"
+            class="btn mx-auto w-50 btn-secondary"><span>Cancel</span></button>
+          <button v-show="data.status" type="button" @click="closeForm()" :disabled="isSync()"
+            class="btn mx-auto w-50 btn-primary">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
