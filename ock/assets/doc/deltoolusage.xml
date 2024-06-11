@@ -1,0 +1,67 @@
+  <?xml version="1.0" encoding="utf-8" ?> 
+- <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+- <Header>
+- <Security xmlns="http://schemas.xmlsoap.org/ws/2002/04/secext">
+- <UsernameToken>
+  <Username>USER1@DS_MP_1</Username> 
+  <Password>123456</Password> 
+  </UsernameToken>
+  </Security>
+  <SessionScenario xmlns="http://schemas.datastream.net/headers">terminate</SessionScenario> 
+  <Organization xmlns="http://schemas.datastream.net/headers">ORG1</Organization> 
+  </Header>
+- <Body>
+- <MP7141_DeleteToolUsage_001 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" verb="Delete" noun="ToolUsage" version="001" xmlns="http://schemas.datastream.net/MP_functions/MP7141_001">
+  <TOOLUSAGEPK xmlns="http://schemas.datastream.net/MP_fields">TOOLUSAGEPK1</TOOLUSAGEPK> 
+- <TOOLUSAGEID xmlns="http://schemas.datastream.net/MP_fields">
+- <TOOLID>
+  <TOOLCODE>TOOLCODE1</TOOLCODE> 
+- <ORGANIZATIONID entity="User">
+  <ORGANIZATIONCODE>ORGANIZATIONCO1</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </TOOLID>
+- <DEPARTMENTID>
+  <DEPARTMENTCODE>DEPARTMENTCODE1</DEPARTMENTCODE> 
+- <ORGANIZATIONID entity="Organization">
+  <ORGANIZATIONCODE>ORGANIZATIONCO2</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </DEPARTMENTID>
+- <ACTIVITYID>
+- <WORKORDERID auto_generated="true">
+  <JOBNUM>JOBNUM1</JOBNUM> 
+- <ORGANIZATIONID entity="Group">
+  <ORGANIZATIONCODE>ORGANIZATIONCO3</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION3</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </WORKORDERID>
+  <ACTIVITYCODE auto_generated="false">1</ACTIVITYCODE> 
+  <ACTIVITYNOTE>ACTIVITYNOTE1</ACTIVITYNOTE> 
+  </ACTIVITYID>
+- <DATEUSED qualifier="ACCOUNTING">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </DATEUSED>
+  <JOBSEQUENCE>1</JOBSEQUENCE> 
+  </TOOLUSAGEID>
+- <RELATEDWORKORDERID auto_generated="true" xmlns="http://schemas.datastream.net/MP_fields">
+  <JOBNUM>JOBNUM1</JOBNUM> 
+- <ORGANIZATIONID entity="Class">
+  <ORGANIZATIONCODE>ORGANIZATIONCO4</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION4</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </RELATEDWORKORDERID>
+  </MP7141_DeleteToolUsage_001>
+  </Body>
+  </Envelope>

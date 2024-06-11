@@ -1,0 +1,116 @@
+  <?xml version="1.0" encoding="utf-8" ?> 
+- <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+- <Header>
+- <Security xmlns="http://schemas.xmlsoap.org/ws/2002/04/secext">
+- <UsernameToken>
+  <Username>USER1@DS_MP_1</Username> 
+  <Password>123456</Password> 
+  </UsernameToken>
+  </Security>
+  <SessionScenario xmlns="http://schemas.datastream.net/headers">terminate</SessionScenario> 
+  <Organization xmlns="http://schemas.datastream.net/headers">ORG1</Organization> 
+  </Header>
+- <Body>
+- <MP0070_AddToolUsage_001 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" verb="Add" noun="ToolUsage" version="001" confirm_notoolrate_exist="prompt" confirm_scheduleddate_outofrange="prompt" xmlns="http://schemas.datastream.net/MP_functions/MP0070_001">
+- <ToolUsage recordid="1" has_department_security="has_1" xmlns="http://schemas.datastream.net/MP_entities/ToolUsage_001">
+  <TOOLUSAGEPK xmlns="http://schemas.datastream.net/MP_fields">TOOLUSAGEPK1</TOOLUSAGEPK> 
+- <TOOLID xmlns="http://schemas.datastream.net/MP_fields">
+  <TOOLCODE>TOOLCODE1</TOOLCODE> 
+- <ORGANIZATIONID entity="User">
+  <ORGANIZATIONCODE>ORGANIZATIONCO1</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </TOOLID>
+- <ACTIVITYID xmlns="http://schemas.datastream.net/MP_fields">
+- <WORKORDERID auto_generated="true">
+  <JOBNUM>JOBNUM1</JOBNUM> 
+- <ORGANIZATIONID entity="Organization">
+  <ORGANIZATIONCODE>ORGANIZATIONCO2</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </WORKORDERID>
+  <ACTIVITYCODE auto_generated="false">1</ACTIVITYCODE> 
+  <ACTIVITYNOTE>ACTIVITYNOTE1</ACTIVITYNOTE> 
+  </ACTIVITYID>
+- <DEPARTMENTID xmlns="http://schemas.datastream.net/MP_fields">
+  <DEPARTMENTCODE>DEPARTMENTCODE1</DEPARTMENTCODE> 
+- <ORGANIZATIONID entity="Group">
+  <ORGANIZATIONCODE>ORGANIZATIONCO3</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION3</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </DEPARTMENTID>
+- <DATEUSED qualifier="ACCOUNTING" xmlns="http://schemas.datastream.net/MP_fields">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </DATEUSED>
+- <TOOLHOURS qualifier="ACCEPTED" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </TOOLHOURS>
+- <DATEBOOKED qualifier="ACCOUNTING" xmlns="http://schemas.datastream.net/MP_fields">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </DATEBOOKED>
+- <TOOLQUANTITY qualifier="ACCEPTED" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </TOOLQUANTITY>
+- <TARIFF qualifier="ACTUAL" type="T" index="index1" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <CURRENCY xmlns="http://www.openapplications.org/oagis_fields">CURRENCY1</CURRENCY> 
+  <DRCR xmlns="http://www.openapplications.org/oagis_fields">DRCR1</DRCR> 
+  </TARIFF>
+- <TOOLCOST qualifier="ACTUAL" type="T" index="index1" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <CURRENCY xmlns="http://www.openapplications.org/oagis_fields">CURRENCY1</CURRENCY> 
+  <DRCR xmlns="http://www.openapplications.org/oagis_fields">DRCR1</DRCR> 
+  </TOOLCOST>
+  <SCHEDULEDHOURS xmlns="http://schemas.datastream.net/MP_fields">1</SCHEDULEDHOURS> 
+- <SCHEDULEDQUANTITY qualifier="ACCEPTED" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </SCHEDULEDQUANTITY>
+- <CURRENCYID xmlns="http://schemas.datastream.net/MP_fields">
+  <CURRENCYCODE>CU1</CURRENCYCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </CURRENCYID>
+  <JOBSEQUENCE xmlns="http://schemas.datastream.net/MP_fields">1</JOBSEQUENCE> 
+  </ToolUsage>
+- <MULTIEQUIPSPLITINFO xmlns="http://schemas.datastream.net/MP_fields">
+- <RELATEDWORKORDERID auto_generated="true">
+  <JOBNUM>JOBNUM1</JOBNUM> 
+- <ORGANIZATIONID entity="Class">
+  <ORGANIZATIONCODE>ORGANIZATIONCO4</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION4</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </RELATEDWORKORDERID>
+  </MULTIEQUIPSPLITINFO>
+  </MP0070_AddToolUsage_001>
+  </Body>
+  </Envelope>

@@ -1,0 +1,74 @@
+  <?xml version="1.0" encoding="utf-8" ?> 
+- <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+- <Header>
+- <Security xmlns="http://schemas.xmlsoap.org/ws/2002/04/secext">
+- <UsernameToken>
+  <Username>USER1@DS_MP_1</Username> 
+  <Password>123456</Password> 
+  </UsernameToken>
+  </Security>
+  <SessionScenario xmlns="http://schemas.datastream.net/headers">terminate</SessionScenario> 
+  <Organization xmlns="http://schemas.datastream.net/headers">ORG1</Organization> 
+  </Header>
+- <Body>
+- <MP7097_AddTool_001 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" verb="Add" noun="Tool" version="001" xmlns="http://schemas.datastream.net/MP_functions/MP7097_001">
+- <Tool recordid="1" xmlns="http://schemas.datastream.net/MP_entities/Tool_001">
+- <TOOLID xmlns="http://schemas.datastream.net/MP_fields">
+  <TOOLCODE>TOOLCODE1</TOOLCODE> 
+- <ORGANIZATIONID entity="User">
+  <ORGANIZATIONCODE>ORGANIZATIONCO1</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </TOOLID>
+- <CLASSID entity="ent1" xmlns="http://schemas.datastream.net/MP_fields">
+  <CLASSCODE>CLASSCO1</CLASSCODE> 
+- <ORGANIZATIONID entity="Organization">
+  <ORGANIZATIONCODE>ORGANIZATIONCO2</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </CLASSID>
+  <AVAILABLEFORCUS xmlns="http://schemas.datastream.net/MP_fields">false</AVAILABLEFORCUS> 
+- <USERDEFINEDAREA customfieldlimitexceeded="cust1" xmlns="http://schemas.datastream.net/MP_fields">
+- <CUSTOMFIELD index="1" entity="entity1" type="type1" changed="chan1">
+  <PROPERTYCODE>PROPERT1</PROPERTYCODE> 
+  <PROPERTYLABEL>PROPERTYLABEL1</PROPERTYLABEL> 
+- <CLASSID entity="ent2">
+  <CLASSCODE>CLASSCO2</CLASSCODE> 
+- <ORGANIZATIONID entity="Group">
+  <ORGANIZATIONCODE>ORGANIZATIONCO3</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION3</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </CLASSID>
+- <DATEFIELD qualifier="ACCOUNTING">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </DATEFIELD>
+  <MAXVALUE>MAXVALUE1</MAXVALUE> 
+  <MINVALUE>MINVALUE1</MINVALUE> 
+  <UOM>UOM1</UOM> 
+- <LOVSETTINGS>
+  <LOV_TYPE>1</LOV_TYPE> 
+  <LOV_VALIDATE>LOV_1</LOV_VALIDATE> 
+  </LOVSETTINGS>
+- <VALUESOURCE>
+  <CATVALUE>CATV1</CATVALUE> 
+  <NONUPDATEABLE>NONU1</NONUPDATEABLE> 
+  </VALUESOURCE>
+  <GROUPLABEL>GROUPLABEL1</GROUPLABEL> 
+  </CUSTOMFIELD>
+  <STATUSCODE>STA1</STATUSCODE> 
+  </USERDEFINEDAREA>
+  <ACCOUNTSEGMENTVALUE xmlns="http://schemas.datastream.net/MP_fields">ACCOUNTSEGMENTVALUE1</ACCOUNTSEGMENTVALUE> 
+  </Tool>
+  </MP7097_AddTool_001>
+  </Body>
+  </Envelope>

@@ -1,0 +1,32 @@
+  <?xml version="1.0" encoding="utf-8" ?> 
+- <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+- <Header>
+- <Security xmlns="http://schemas.xmlsoap.org/ws/2002/04/secext">
+- <UsernameToken>
+  <Username>USER1@DS_MP_1</Username> 
+  <Password>123456</Password> 
+  </UsernameToken>
+  </Security>
+  <SessionScenario xmlns="http://schemas.datastream.net/headers">terminate</SessionScenario> 
+  <Organization xmlns="http://schemas.datastream.net/headers">ORG1</Organization> 
+  </Header>
+- <Body>
+- <MP6147_DeleteDepartmentTool_001 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" verb="Delete" noun="DepartmentTool" version="001" xmlns="http://schemas.datastream.net/MP_functions/MP6147_001">
+- <TOOLSDEPTID xmlns="http://schemas.datastream.net/MP_fields">
+  <DEPARTMENTCODE>DEPARTMENTCODE1</DEPARTMENTCODE> 
+- <TOOLID>
+  <TOOLCODE>TOOLCODE1</TOOLCODE> 
+- <ORGANIZATIONID entity="User">
+  <ORGANIZATIONCODE>ORGANIZATIONCO1</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </TOOLID>
+- <ORGANIZATIONID entity="Organization">
+  <ORGANIZATIONCODE>ORGANIZATIONCO2</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </ORGANIZATIONID>
+  </TOOLSDEPTID>
+  </MP6147_DeleteDepartmentTool_001>
+  </Body>
+  </Envelope>
