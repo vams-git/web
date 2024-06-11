@@ -1,8 +1,7 @@
-let alert_ = {
+let checklist_ = {
     data() {
         return {
-            alerts: {},
-
+            checklist: {},
         };
     },
     methods: {

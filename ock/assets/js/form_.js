@@ -1,8 +1,8 @@
-let alert_ = {
+let form_ = {
     data() {
         return {
-            alerts: {},
-
+            form: {},
+  
         };
     },
     methods: {
@@ -11,7 +11,7 @@ let alert_ = {
         },
         add(p) {
             let app = this;
-
+  
             if (p == undefined) {
                 return app.add({
                     'message': 'alert parameters missings',
@@ -82,4 +82,4 @@ let alert_ = {
             app.alerts[id]['view'] = false
         }
     },
-};
+  };
