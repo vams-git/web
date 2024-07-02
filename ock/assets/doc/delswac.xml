@@ -1,0 +1,29 @@
+  <?xml version="1.0" encoding="utf-8" ?> 
+- <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+- <Header>
+- <Security xmlns="http://schemas.xmlsoap.org/ws/2002/04/secext">
+- <UsernameToken>
+  <Username>USER1@DS_MP_1</Username> 
+  <Password>123456</Password> 
+  </UsernameToken>
+  </Security>
+  <SessionScenario xmlns="http://schemas.datastream.net/headers">terminate</SessionScenario> 
+  <Organization xmlns="http://schemas.datastream.net/headers">ORG1</Organization> 
+  </Header>
+- <Body>
+- <MP7094_DeleteStandardWorkOrderActivity_001 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" verb="Delete" noun="StandardWorkOrderActivity" version="001" callname="DeleteStandardWorkOrderActivity" xmlns="http://schemas.datastream.net/MP_functions/MP7094_001">
+- <STANDWOACTID xmlns="http://schemas.datastream.net/MP_fields">
+- <STANDARDWO>
+  <STDWOCODE>STDWOCODE1</STDWOCODE> 
+- <ORGANIZATIONID entity="User">
+  <ORGANIZATIONCODE>ORGANIZATIONCO1</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </STANDARDWO>
+  <ACTIVITYCODE auto_generated="false">1</ACTIVITYCODE> 
+  <ACTIVITYNOTE>ACTIVITYNOTE1</ACTIVITYNOTE> 
+  </STANDWOACTID>
+  </MP7094_DeleteStandardWorkOrderActivity_001>
+  </Body>
+  </Envelope>
