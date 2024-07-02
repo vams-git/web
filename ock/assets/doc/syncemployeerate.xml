@@ -1,0 +1,101 @@
+  <?xml version="1.0" encoding="utf-8" ?> 
+- <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+- <Header>
+- <Security xmlns="http://schemas.xmlsoap.org/ws/2002/04/secext">
+- <UsernameToken>
+  <Username>USER1@DS_MP_1</Username> 
+  <Password>123456</Password> 
+  </UsernameToken>
+  </Security>
+  <SessionScenario xmlns="http://schemas.datastream.net/headers">terminate</SessionScenario> 
+  <Organization xmlns="http://schemas.datastream.net/headers">ORG1</Organization> 
+  </Header>
+- <Body>
+- <MP7148_SyncEmployeeRate_001 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" verb="Sync" noun="EmployeeRate" version="001" xmlns="http://schemas.datastream.net/MP_functions/MP7148_001">
+- <EmployeeRate recordid="1" has_department_security="has_1" xmlns="http://schemas.datastream.net/MP_entities/EmployeeRate_001">
+- <EMPLOYEERATEID xmlns="http://schemas.datastream.net/MP_fields">
+- <DEPARTMENTID>
+  <DEPARTMENTCODE>DEPARTMENTCODE1</DEPARTMENTCODE> 
+- <ORGANIZATIONID entity="User">
+  <ORGANIZATIONCODE>ORGANIZATIONCO1</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </DEPARTMENTID>
+  <EMPRATESUPPLIRCODE>*</EMPRATESUPPLIRCODE> 
+  <EMPRATESUPPLIRORGCODE>*</EMPRATESUPPLIRORGCODE> 
+  <EMPRATETRADECODE>*</EMPRATETRADECODE> 
+- <EMPLOYEE>
+  <PERSONCODE>PERSONCODE1</PERSONCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </EMPLOYEE>
+- <ORGANIZATIONID entity="Organization">
+  <ORGANIZATIONCODE>ORGANIZATIONCO2</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </ORGANIZATIONID>
+- <EMPLOYEERATESTARTDATE qualifier="ACCOUNTING">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </EMPLOYEERATESTARTDATE>
+  <OCCUPATIONTYPECODE>OCC1</OCCUPATIONTYPECODE> 
+  </EMPLOYEERATEID>
+- <EMPLOYEERATEENDDATE qualifier="ACCOUNTING" xmlns="http://schemas.datastream.net/MP_fields">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </EMPLOYEERATEENDDATE>
+- <EMPLOYEEHOURLYRATE qualifier="ACTUAL" type="T" index="index1" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <CURRENCY xmlns="http://www.openapplications.org/oagis_fields">CURRENCY1</CURRENCY> 
+  <DRCR xmlns="http://www.openapplications.org/oagis_fields">DRCR1</DRCR> 
+  </EMPLOYEEHOURLYRATE>
+  <EMPLOYEERATEPK xmlns="http://schemas.datastream.net/MP_fields">EMPLOYEERATEPK1</EMPLOYEERATEPK> 
+  </EmployeeRate>
+- <EMPLOYEERATEID xmlns="http://schemas.datastream.net/MP_fields">
+- <DEPARTMENTID>
+  <DEPARTMENTCODE>DEPARTMENTCODE2</DEPARTMENTCODE> 
+- <ORGANIZATIONID entity="Group">
+  <ORGANIZATIONCODE>ORGANIZATIONCO3</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION3</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </DEPARTMENTID>
+  <EMPRATESUPPLIRCODE>EMPRATESUPPLIRCODE1</EMPRATESUPPLIRCODE> 
+  <EMPRATESUPPLIRORGCODE>EMPRATESUPPLIR1</EMPRATESUPPLIRORGCODE> 
+  <EMPRATETRADECODE>EMPRATETRADECO1</EMPRATETRADECODE> 
+- <EMPLOYEE>
+  <PERSONCODE>PERSONCODE2</PERSONCODE> 
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </EMPLOYEE>
+- <ORGANIZATIONID entity="Class">
+  <ORGANIZATIONCODE>ORGANIZATIONCO4</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION4</DESCRIPTION> 
+  </ORGANIZATIONID>
+- <EMPLOYEERATESTARTDATE qualifier="ACTEND">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">0001</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">-79228162514264337593543950335</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">-79228162514264337593543950335</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">-79228162514264337593543950335</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">-79228162514264337593543950335</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">-79228162514264337593543950335</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">-79228162514264337593543950335</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE2</TIMEZONE> 
+  </EMPLOYEERATESTARTDATE>
+  <OCCUPATIONTYPECODE>OCC2</OCCUPATIONTYPECODE> 
+  </EMPLOYEERATEID>
+  </MP7148_SyncEmployeeRate_001>
+  </Body>
+  </Envelope>
