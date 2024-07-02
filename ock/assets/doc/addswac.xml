@@ -1,0 +1,262 @@
+  <?xml version="1.0" encoding="utf-8" ?> 
+- <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+- <Header>
+- <Security xmlns="http://schemas.xmlsoap.org/ws/2002/04/secext">
+- <UsernameToken>
+  <Username>USER1@DS_MP_1</Username> 
+  <Password>123456</Password> 
+  </UsernameToken>
+  </Security>
+  <SessionScenario xmlns="http://schemas.datastream.net/headers">terminate</SessionScenario> 
+  <Organization xmlns="http://schemas.datastream.net/headers">ORG1</Organization> 
+  </Header>
+- <Body>
+- <MP7092_AddStandardWorkOrderActivity_001 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" verb="Add" noun="StandardWorkOrderActivity" version="001" callname="AddStandardWorkOrderActivity" xmlns="http://schemas.datastream.net/MP_functions/MP7092_001">
+- <StandardWorkOrderActivity recordid="1" task_has_enhanced_planning="false" activity_has_plantools="false" xmlns="http://schemas.datastream.net/MP_entities/StandardWorkOrderActivity_001">
+- <STANDWOACTID xmlns="http://schemas.datastream.net/MP_fields">
+- <STANDARDWO>
+  <STDWOCODE>STDWOCODE1</STDWOCODE> 
+- <ORGANIZATIONID entity="User">
+  <ORGANIZATIONCODE>ORGANIZATIONCO1</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </STANDARDWO>
+  <ACTIVITYCODE auto_generated="false">1</ACTIVITYCODE> 
+  <ACTIVITYNOTE>ACTIVITYNOTE1</ACTIVITYNOTE> 
+  </STANDWOACTID>
+- <TRADEID xmlns="http://schemas.datastream.net/MP_fields">
+  <TRADECODE>TRADECODE1</TRADECODE> 
+- <ORGANIZATIONID entity="Organization">
+  <ORGANIZATIONCODE>ORGANIZATIONCO2</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION2</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </TRADEID>
+  <ESTIMATEDHOURS xmlns="http://schemas.datastream.net/MP_fields">1</ESTIMATEDHOURS> 
+  <PERSONS xmlns="http://schemas.datastream.net/MP_fields">1</PERSONS> 
+  <DURATION xmlns="http://schemas.datastream.net/MP_fields">1</DURATION> 
+  <STANDWOACTSTART xmlns="http://schemas.datastream.net/MP_fields">1</STANDWOACTSTART> 
+- <TASKSID xmlns="http://schemas.datastream.net/MP_fields">
+  <TASKCODE>TASKCODE1</TASKCODE> 
+  <TASKREVISION>1</TASKREVISION> 
+- <ORGANIZATIONID entity="Group">
+  <ORGANIZATIONCODE>ORGANIZATIONCO3</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION3</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+- <TASKQUANTITY qualifier="ACCEPTED">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </TASKQUANTITY>
+- <TASKUOM>
+  <UOMCODE>UOMCODE1</UOMCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </TASKUOM>
+  </TASKSID>
+  <MTLCODE xmlns="http://schemas.datastream.net/MP_fields">MTLCODE1</MTLCODE> 
+  <SPECIAL xmlns="http://schemas.datastream.net/MP_fields">SPEC1</SPECIAL> 
+  <HIREDLABOR xmlns="http://schemas.datastream.net/MP_fields">HIRE1</HIREDLABOR> 
+- <TASKQUANTITY qualifier="ACTDUR" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">-79228162514264337593543950335</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">-79228162514264337593543950335</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN2</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM2</UOM> 
+  </TASKQUANTITY>
+- <UOMID xmlns="http://schemas.datastream.net/MP_fields">
+  <UOMCODE>UOMCODE1</UOMCODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </UOMID>
+  <REASONFORREPAIR xmlns="http://schemas.datastream.net/MP_fields">REA1</REASONFORREPAIR> 
+  <WORKACCOMPLISHED xmlns="http://schemas.datastream.net/MP_fields">WOR1</WORKACCOMPLISHED> 
+  <TECHNICIANPARTFAILURE xmlns="http://schemas.datastream.net/MP_fields">TEC1</TECHNICIANPARTFAILURE> 
+- <MANUFACTURERID xmlns="http://schemas.datastream.net/MP_fields">
+  <MANUFACTURERCODE>MANUFACTURERCODE1</MANUFACTURERCODE> 
+- <ORGANIZATIONID entity="Class">
+  <ORGANIZATIONCODE>ORGANIZATIONCO4</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION4</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </MANUFACTURERID>
+  <SYSTEMLEVEL xmlns="http://schemas.datastream.net/MP_fields">SYSTEMLEVEL1</SYSTEMLEVEL> 
+  <ASSEMBLYLEVEL xmlns="http://schemas.datastream.net/MP_fields">ASSEMBLYLEVEL1</ASSEMBLYLEVEL> 
+  <COMPONENTLEVEL xmlns="http://schemas.datastream.net/MP_fields">COMPONENTLEVEL1</COMPONENTLEVEL> 
+- <CREATIONDATE qualifier="ACCOUNTING" xmlns="http://schemas.datastream.net/MP_fields">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </CREATIONDATE>
+- <DATEUPDATED qualifier="ACCOUNTING" xmlns="http://schemas.datastream.net/MP_fields">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </DATEUPDATED>
+- <AVERAGEHOURSBOOKED qualifier="ACCEPTED" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </AVERAGEHOURSBOOKED>
+  <ACTIVITYCOMMENT xmlns="http://schemas.datastream.net/MP_fields">ACTIVITYCOMMENT1</ACTIVITYCOMMENT> 
+- <StandardUserDefinedFields xmlns="http://schemas.datastream.net/MP_fields">
+  <UDFCHAR01>UDFCHAR011</UDFCHAR01> 
+  <UDFCHAR02>UDFCHAR021</UDFCHAR02> 
+  <UDFCHAR03>UDFCHAR031</UDFCHAR03> 
+  <UDFCHAR04>UDFCHAR041</UDFCHAR04> 
+  <UDFCHAR05>UDFCHAR051</UDFCHAR05> 
+  <UDFCHAR06>UDFCHAR061</UDFCHAR06> 
+  <UDFCHAR07>UDFCHAR071</UDFCHAR07> 
+  <UDFCHAR08>UDFCHAR081</UDFCHAR08> 
+  <UDFCHAR09>UDFCHAR091</UDFCHAR09> 
+  <UDFCHAR10>UDFCHAR101</UDFCHAR10> 
+  <UDFCHAR11>UDFCHAR111</UDFCHAR11> 
+  <UDFCHAR12>UDFCHAR121</UDFCHAR12> 
+  <UDFCHAR13>UDFCHAR131</UDFCHAR13> 
+  <UDFCHAR14>UDFCHAR141</UDFCHAR14> 
+  <UDFCHAR15>UDFCHAR151</UDFCHAR15> 
+  <UDFCHAR16>UDFCHAR161</UDFCHAR16> 
+  <UDFCHAR17>UDFCHAR171</UDFCHAR17> 
+  <UDFCHAR18>UDFCHAR181</UDFCHAR18> 
+  <UDFCHAR19>UDFCHAR191</UDFCHAR19> 
+  <UDFCHAR20>UDFCHAR201</UDFCHAR20> 
+  <UDFCHAR21>UDFCHAR211</UDFCHAR21> 
+  <UDFCHAR22>UDFCHAR221</UDFCHAR22> 
+  <UDFCHAR23>UDFCHAR231</UDFCHAR23> 
+  <UDFCHAR24>UDFCHAR241</UDFCHAR24> 
+  <UDFCHAR25>UDFCHAR251</UDFCHAR25> 
+  <UDFCHAR26>UDFCHAR261</UDFCHAR26> 
+  <UDFCHAR27>UDFCHAR271</UDFCHAR27> 
+  <UDFCHAR28>UDFCHAR281</UDFCHAR28> 
+  <UDFCHAR29>UDFCHAR291</UDFCHAR29> 
+  <UDFCHAR30>UDFCHAR301</UDFCHAR30> 
+- <UDFNUM01 qualifier="ACCEPTED">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </UDFNUM01>
+- <UDFNUM02 qualifier="ACCEPTED">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </UDFNUM02>
+- <UDFNUM03 qualifier="ACCEPTED">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </UDFNUM03>
+- <UDFNUM04 qualifier="ACCEPTED">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </UDFNUM04>
+- <UDFNUM05 qualifier="ACCEPTED">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </UDFNUM05>
+- <UDFDATE01 qualifier="ACCOUNTING">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </UDFDATE01>
+- <UDFDATE02 qualifier="ACCOUNTING">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </UDFDATE02>
+- <UDFDATE03 qualifier="ACCOUNTING">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </UDFDATE03>
+- <UDFDATE04 qualifier="ACCOUNTING">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </UDFDATE04>
+- <UDFDATE05 qualifier="ACCOUNTING">
+  <YEAR xmlns="http://www.openapplications.org/oagis_fields">1900</YEAR> 
+  <MONTH xmlns="http://www.openapplications.org/oagis_fields">1</MONTH> 
+  <DAY xmlns="http://www.openapplications.org/oagis_fields">1</DAY> 
+  <HOUR xmlns="http://www.openapplications.org/oagis_fields">1</HOUR> 
+  <MINUTE xmlns="http://www.openapplications.org/oagis_fields">1</MINUTE> 
+  <SECOND xmlns="http://www.openapplications.org/oagis_fields">1</SECOND> 
+  <SUBSECOND xmlns="http://www.openapplications.org/oagis_fields">1</SUBSECOND> 
+  <TIMEZONE xmlns="http://www.openapplications.org/oagis_fields">TIMEZONE1</TIMEZONE> 
+  </UDFDATE05>
+  <UDFCHKBOX01>UDFC1</UDFCHKBOX01> 
+  <UDFCHKBOX02>UDFC1</UDFCHKBOX02> 
+  <UDFCHKBOX03>UDFC1</UDFCHKBOX03> 
+  <UDFCHKBOX04>UDFC1</UDFCHKBOX04> 
+  <UDFCHKBOX05>UDFC1</UDFCHKBOX05> 
+  <UDFNOTE01>UDFNOTE011</UDFNOTE01> 
+  <UDFNOTE02>UDFNOTE021</UDFNOTE02> 
+  </StandardUserDefinedFields>
+  <PLANNINGLEVEL xmlns="http://schemas.datastream.net/MP_fields">PLA1</PLANNINGLEVEL> 
+  <MULTIPLETRADES xmlns="http://schemas.datastream.net/MP_fields">false</MULTIPLETRADES> 
+- <TOTALPEOPLEREQUIRED qualifier="ACCEPTED" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </TOTALPEOPLEREQUIRED>
+- <TOTALESTIMATEDHOURS qualifier="ACCEPTED" xmlns="http://schemas.datastream.net/MP_fields">
+  <VALUE xmlns="http://www.openapplications.org/oagis_fields">1</VALUE> 
+  <NUMOFDEC xmlns="http://www.openapplications.org/oagis_fields">1</NUMOFDEC> 
+  <SIGN xmlns="http://www.openapplications.org/oagis_fields">SIGN1</SIGN> 
+  <UOM xmlns="http://www.openapplications.org/oagis_fields">UOM1</UOM> 
+  </TOTALESTIMATEDHOURS>
+  <PARTLOCATIONCODE xmlns="http://schemas.datastream.net/MP_fields">PARTLOCATIONCODE1</PARTLOCATIONCODE> 
+- <LABORTYPE xmlns="http://schemas.datastream.net/MP_fields">
+  <LABORTYPECODE>LAB1</LABORTYPECODE> 
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </LABORTYPE>
+- <SUPPLIERID xmlns="http://schemas.datastream.net/MP_fields">
+  <SUPPLIERCODE>SUPPLIERCODE1</SUPPLIERCODE> 
+- <ORGANIZATIONID entity="Department">
+  <ORGANIZATIONCODE>ORGANIZATIONCO5</ORGANIZATIONCODE> 
+  <DESCRIPTION>DESCRIPTION5</DESCRIPTION> 
+  </ORGANIZATIONID>
+  <DESCRIPTION>DESCRIPTION1</DESCRIPTION> 
+  </SUPPLIERID>
+  </StandardWorkOrderActivity>
+  </MP7092_AddStandardWorkOrderActivity_001>
+  </Body>
+  </Envelope>
