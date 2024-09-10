@@ -694,7 +694,7 @@
         month: "short",
         day: "numeric"
       };
-      var orgs = ['TAS', 'WAU', 'NWA', 'WAR', 'SAU', 'VIC', 'NSW', 'TAS', 'NTE','NVE','NVW','NVP'];
+      var orgs = ['TAS', 'WAU', 'NWA', 'WAR', 'SAU', 'VIC', 'NSW', 'QLD', 'FCG', 'NTE','NVE','NVW','NVP'];
       var options = {};
       orgs.forEach(function (e) {
         options[e] = JSON.parse(JSON.stringify(option))
@@ -707,6 +707,7 @@
       options['SAU']['timeZone'] = 'Australia/Adelaide';
       options['NSW']['timeZone'] = 'Australia/Sydney';
       options['QLD']['timeZone'] = 'Australia/Brisbane';
+      options['FCG']['timeZone'] = 'Australia/Brisbane';
       options['NTE']['timeZone'] = 'Australia/Darwin';
       options['NVE']['timeZone'] = 'Australia/Perth';
       options['NVW']['timeZone'] = 'Australia/Perth';
